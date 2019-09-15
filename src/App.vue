@@ -1,13 +1,32 @@
 <template>
     <div id="app">
-        <div id="nav">
-            <router-link to="/">Home</router-link>
-            |
-            <router-link to="/about">About</router-link>
-        </div>
-        <router-view/>
+        <!--<div>-->
+            <!--<div id="nav">-->
+                <!--<router-link to="/">Home</router-link>-->
+                <!--|-->
+                <!--<router-link to="/about">About</router-link>-->
+            <!--</div>-->
+            <!--<router-view/>-->
+        <!--</div>-->
+        <h1>{{some}}</h1>
     </div>
 </template>
+
+<script>
+    export default {
+        name: 'App',
+        data() {
+            return {
+                some: 'Всё не всё и то и не то!'
+            }
+        },
+        created() {
+            this.axios.get('/api/test').then((res) => {
+                this.some = res.data;
+            })
+        }
+    }
+</script>
 
 <style lang="less">
     #app {
