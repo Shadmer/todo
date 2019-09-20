@@ -4,8 +4,8 @@ namespace models;
 
 abstract class BaseModel
 {
-    private $db;
-    private $table;
+    protected $db;
+    protected $table;
 
     public function __construct(\PDO $db, $table)
     {

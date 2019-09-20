@@ -8,7 +8,7 @@
             <!--</div>-->
             <!--<router-view/>-->
         <!--</div>-->
-        <h1>{{some}}</h1>
+        <pre>{{some}}</pre>
     </div>
 </template>
 
@@ -21,9 +21,25 @@
             }
         },
         created() {
-            this.axios.get('/api/test').then((res) => {
+            let data = new FormData();
+            data.append('task', '131313 не 1');
+            data.append('is_folder', '1');
+
+            this.axios.post('/api/test/add', data)
+                .then((res) => {
+                console.log(res);
                 this.some = res.data;
             })
+
+
+            // this.axios({
+            //     method: 'post',
+            //     url: '/api/test',
+            //     data: data
+            // }).then((res) => {
+            //     console.log(res.data);
+            //     this.some = res.data;
+            // });
         }
     }
 </script>

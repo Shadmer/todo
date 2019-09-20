@@ -14,5 +14,5 @@ require_once ROOT . '/core/Autoload.php';
 
 $routesPath = ROOT . '/config/routes.php';
 $router = new \core\Router($routesPath);
-// todo проверка роутера на валидность
+// todo проверка роутера на валидность?
 $router->run();

@@ -16,6 +16,9 @@ class Router
         if (!empty($_SERVER["REQUEST_URI"])) {
             return trim($_SERVER["REQUEST_URI"], '/');
         }
+//        if (!empty($_GET['q'])) {
+//            return trim($_GET['q'], '/');
+//        }
     }
 
     private function getSegments($uriPattern, $path, $uri)

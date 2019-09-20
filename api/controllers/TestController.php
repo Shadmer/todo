@@ -7,22 +7,35 @@ use \models\TaskModel;
 
 class TestController
 {
+    private $pdo;
+
+    public function __construct()
+    {
+        $this->pdo = new TaskModel(DB::connect());
+    }
+
     public function actionIndex()
     {
-//        $db = DB::connect();
-//        $tasks = new TaskModel($db);
-//        $test = $tasks->getAll();
-//        echo '<pre>';
-//        print_r($test);
+        echo json_encode($this->pdo->getAll());
+        return true;
+    }
 
+    public function actionAdd()
+    {
+        $this->pdo->add($_POST);
+        return true;
+    }
 
-//        echo '<pre>';
-//        echo $_SERVER['REQUEST_METHOD'];
-//        echo '<form action="#" method="post">';
-//        echo '<input type="text" name="foo">';
-//        echo '<button name="submit" value="haha">Тык</button>';
-//        echo '</form>';
+    public function actionDelete($id)
+    {
+        $this->pdo->delete($id);
+        return $id;
+    }
 
+    public function actionEdit($id)
+    {
+        echo $id;
+        return $id;
     }
 
 }
