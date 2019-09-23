@@ -16,6 +16,11 @@ class TestController
 
     public function actionIndex()
     {
+        //todo (?) все запросы на индекс, а здесь распределеине по другим экшенам
+    }
+
+    public function actionGet()
+    {
         echo json_encode($this->pdo->getAll());
         return true;
     }
@@ -34,7 +39,7 @@ class TestController
 
     public function actionEdit($id)
     {
-        echo $id;
+        $this->pdo->edit($id, $_POST);
         return $id;
     }
 
