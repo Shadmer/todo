@@ -22,25 +22,26 @@ class TestController
     public function actionGet()
     {
         echo json_encode($this->pdo->getAll());
-        return true;
+        exit;
     }
 
     public function actionAdd()
     {
-        $this->pdo->add($_POST);
-        return true;
+        echo json_encode($this->pdo->add($_POST));
+        exit;
     }
 
     public function actionDelete($id)
     {
-        $this->pdo->delete($id);
-        return $id;
+        echo json_encode($this->pdo->delete($id));
+        exit;
     }
 
     public function actionEdit($id)
     {
-        $this->pdo->edit($id, $_POST);
-        return $id;
+        parse_str(file_get_contents('php://input'), $_PUT);
+        echo json_encode($this->pdo->edit($id, $_PUT));
+        exit;
     }
 
 }

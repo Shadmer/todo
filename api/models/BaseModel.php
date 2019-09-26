@@ -47,6 +47,8 @@ abstract class BaseModel
         $stmt->execute([
             'id' => $id,
         ]);
-        return $id;
+        return [
+            'id' => (int)$id
+        ];
     }
 }

@@ -11,22 +11,30 @@ class TaskModel extends BaseModel
 
     public function add($data)
     {
-        $sql = "INSERT INTO `tasks` (task) VALUES (:task)";
+        $sql = "INSERT INTO `tasks` (title) VALUES (:title)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'task' => $data['task'],
+            'title' => $data['title'],
         ]);
-        return $data;
+
+        $id = (int)$this->db->lastInsertId();
+
+        return [
+            'id' => (int)$id,
+        ];
     }
 
     public function edit($id, $data)
     {
-        $sql = "UPDATE `tasks` SET `task`= :task WHERE id = :id";
+        $sql = "UPDATE `tasks` SET `title`= :title WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'id' => $id,
-            'task' => $data['task'],
+            'title' => $data['title'],
         ]);
-        return $id;
+        return [
+            'id' => (int)$id,
+            'title' => $data['title'],
+        ];
     }
 }
