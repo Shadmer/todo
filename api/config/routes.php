@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'test/test' => 'test/index',
-    'test/add' => 'test/add',
-    'test/delete/([0-9]+)' => 'test/delete/$1',
-    'test/edit/([0-9]+)' => 'test/edit/$1',
-    'test' => 'test/get',
+    'task/task' => 'task/index',
+    'task/add' => 'task/add',
+    'task/delete/([0-9]+)' => 'task/delete/$1',
+    'task/edit/([0-9]+)' => 'task/edit/$1',
+    'task' => 'task/get',
 ];

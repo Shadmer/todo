@@ -26,15 +26,17 @@ class TaskModel extends BaseModel
 
     public function edit($id, $data)
     {
-        $sql = "UPDATE `tasks` SET `title`= :title WHERE id = :id";
+        $sql = "UPDATE `tasks` SET `title`= :title, `completed` = :completed WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'id' => $id,
             'title' => $data['title'],
+            'completed' => $data['completed'],
         ]);
         return [
             'id' => (int)$id,
             'title' => $data['title'],
+            'completed' => $data['completed'],
         ];
     }
 }

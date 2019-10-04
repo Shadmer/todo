@@ -5,7 +5,7 @@ namespace controllers;
 use \core\DB;
 use \models\TaskModel;
 
-class TestController
+class TaskController
 {
     private $pdo;
 
