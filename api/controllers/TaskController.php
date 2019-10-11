@@ -44,4 +44,10 @@ class TaskController
         exit;
     }
 
+    public function actionDeleteByCategoryId($id)
+    {
+        echo json_encode($this->pdo->deleteByCategoryId($id));
+        exit;
+    }
+
 }

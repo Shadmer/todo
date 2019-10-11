@@ -9,24 +9,19 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [
         {
-            path: '/tasks',
+            path: '/',
             name: 'Задачи',
             component: Tasks
         },
-        // {
-        //     path: '/matrix',
-        //     name: 'Матрица',
-        //     component: () => import('./views/Matrix.vue')
-        // },
-        // {
-        //     path: '/info',
-        //     name: 'Инфо',
-        //     component: () => import('./views/Info.vue')
-        // },
-        // {
-        //     path: '/cabinet',
-        //     name: 'Кабинет',
-        //     component: () => import('./views/Cabinet.vue')
-        // },
+        {
+            path: '/info',
+            name: 'Инфо',
+            component: () => import('./views/Info.vue')
+        },
+        {
+            path: '/cabinet',
+            name: 'Кабинет',
+            component: () => import('./views/Cabinet.vue')
+        },
     ]
 })

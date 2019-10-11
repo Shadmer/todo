@@ -4,7 +4,14 @@ const state = {
     all: []
 };
 
-const getters = {};
+const getters = {
+    // getTasksByCategory: state => category => {
+    //     let filtered = state.all;
+    //     filter(task => {
+    //         return category
+    //     })
+    // }
+};
 
 const mutations = {
     SET_TASKS(state, tasks) {
@@ -24,6 +31,9 @@ const mutations = {
 
         state.all = state.all.filter(task => task.id !== id);
     },
+    REMOVE_TASK_BY_CATEGORY_ID(state, id) {
+        state.all = state.all.filter(task => task.category_id !== id);
+    }
 };
 
 const actions = {
@@ -38,6 +48,7 @@ const actions = {
     addTask(context, task) {
         let FD = new FormData();
         FD.append("title", task);
+        FD.append("category_id", this.state.currentCategoryId);
         axios({
             method: "post",
             url: "/api/task/add",
@@ -46,6 +57,7 @@ const actions = {
             context.commit('ADD_TASK', {
                 "id": res.data.id,
                 "title": task,
+                "category_id": this.state.currentCategoryId,
                 "editing": false,
             })
         });
@@ -61,12 +73,21 @@ const actions = {
     editTask(context, task){
         let USP = new URLSearchParams();
         USP.append("title", task.title);
+        USP.append("category_id", task.category_id);
         USP.append("completed", Number(task.completed));
         axios({
             method: "put",
             url: "/api/task/edit/" + task.id,
             data: USP
         })
+    },
+    removeTaskByCategoryId(context, id) {
+        axios({
+            method: "delete",
+            url: "/api/task/delete/category/" + id,
+        }).then(() => {
+            context.commit('REMOVE_TASK_BY_CATEGORY_ID', id);
+        });
     }
 };
 

@@ -18,7 +18,7 @@ class DB
 
     private static function getPDO()
     {
-        $paramsPath = ROOT . './config/db_params.php';
+        $paramsPath = ROOT . '/config/db_params.php';
         $params = include($paramsPath);
 
         $dsn = "mysql:host={$params['host']};dbname={$params['db']};charset={$params['charset']}";

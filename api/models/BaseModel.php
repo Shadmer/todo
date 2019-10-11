@@ -39,7 +39,6 @@ abstract class BaseModel
 
     }
 
-
     public function delete($id)
     {
         $sql = "DELETE FROM $this->table WHERE id = :id";

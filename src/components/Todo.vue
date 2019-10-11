@@ -13,7 +13,7 @@
                     <span v-if="task.completed">&#10004;</span>
                     <input type="checkbox" v-model="task.completed" @change="doneEdit(task)">
                 </label>
-                <span class="todo__edit" v-if="index === editingIndex">&#9998;</span>
+                <span class="todo__change" v-if="index === editingIndex" @mousedown="change(task.id)">&#9998;</span>
                 <span class="todo__task"
                       :class="{'todo__task--completed': task.completed}"
                       v-if="index !== editingIndex"
@@ -73,6 +73,10 @@
             }
         },
         methods: {
+            change(id) {
+                this.$store.dispatch('setCurrentTaskId', id);
+                this.$store.dispatch('openStub');
+            },
             add() {
                 if (!this.isNewTask) {
                     return;
@@ -139,8 +143,14 @@
             }
 
             &:hover {
+                .todo__change {
+                    opacity: 1;
+                    transition: opacity .3s;
+                }
+
                 .todo__remove {
                     opacity: 1;
+                    transition: opacity .3s;
                 }
             }
         }
@@ -154,7 +164,7 @@
             cursor: pointer;
         }
 
-        &__edit {
+        &__change {
             position: absolute;
             top: 50%;
             margin-top: -19px;
@@ -183,6 +193,7 @@
             height: 25px;
             border: 1px solid black;
             cursor: pointer;
+            transition: opacity .3s;
 
             span {
                 margin: auto;
