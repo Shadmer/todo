@@ -29,11 +29,6 @@
 <script>
     export default {
         name: "Categories",
-        // updated: function () {
-        //     if (this.categories.length === 0) {
-        //         this.$store.dispatch('setCurrentCategoryId', 0);
-        //     }
-        // },
         data() {
             return {
                 newCategory: '',
@@ -49,18 +44,18 @@
         },
         methods: {
             isCategoryActive(id) {
-                return this.$store.state.currentCategoryId === id && !this.$store.state.currentTaskId;
+                return this.$store.state.categories.currentCategoryId === id && !this.$store.state.tasks.currentTaskId;
             },
             chooseCategory(id) {
-                if (this.$store.state.currentTaskId) {
-                    let task = this.$store.state.tasks.all.find(task => task.id === this.$store.state.currentTaskId);
+                if (this.$store.state.tasks.currentTaskId) {
+                    let task = this.$store.state.tasks.all.find(task => task.id === this.$store.state.tasks.currentTaskId);
                     task.category_id = id;
                     this.$store.dispatch('tasks/editTask', task);
-                    this.$store.dispatch('setCurrentTaskId', 0);
+                    this.$store.dispatch('tasks/setCurrentTaskId', 0);
                     this.$store.dispatch('closeStub');
                     return;
                 }
-                this.$store.dispatch('setCurrentCategoryId', id);
+                this.$store.dispatch('categories/setCurrentCategoryId', id);
 
             },
             add() {
@@ -71,10 +66,14 @@
                 this.newCategory = '';
             },
             remove(id) {
+                let isDel = confirm('Удалить категорию?');
+                if (!isDel) {
+                    return;
+                }
                 this.$store.dispatch('categories/removeCategory', id);
                 this.$store.dispatch('tasks/removeTaskByCategoryId', id);
-                if (this.$store.state.currentCategoryId === id) {
-                    this.$store.dispatch('setCurrentCategoryId', 0);
+                if (this.$store.state.categories.currentCategoryId === id) {
+                    this.$store.dispatch('categories/setCurrentCategoryId', 0);
                 }
 
             }

@@ -11,13 +11,13 @@
 
 <script>
     import Todo from "@/components/Todo";
-    import Categories from "../components/Categories";
+    import Categories from "@/components/Categories";
 
     export default {
         name: 'Tasks',
         components: {
+            Todo,
             Categories,
-            Todo
         },
     }
 </script>

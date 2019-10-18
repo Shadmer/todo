@@ -8,8 +8,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        currentTaskId: 0,
-        currentCategoryId: 0,
         stub: false
     },
     mutations: {
@@ -19,12 +17,6 @@ export default new Vuex.Store({
         OPEN_STUB(state) {
             state.stub = true;
         },
-        SET_CURRENT_TASK_ID(state, id) {
-            state.currentTaskId = id;
-        },
-        SET_CURRENT_CATEGORY_ID(state, id) {
-            state.currentCategoryId = id;
-        }
     },
     actions: {
         openStub(context) {
@@ -32,14 +24,8 @@ export default new Vuex.Store({
         },
         closeStub(context) {
             context.commit('CLOSE_STUB');
-            context.commit('SET_CURRENT_TASK_ID', 0);
+            // context.commit('SET_CURRENT_TASK_ID', 0);
         },
-        setCurrentTaskId(context, id) {
-            context.commit('SET_CURRENT_TASK_ID', id);
-        },
-        setCurrentCategoryId(context, id) {
-            context.commit('SET_CURRENT_CATEGORY_ID', id);
-        }
     },
     modules: {
         tasks,

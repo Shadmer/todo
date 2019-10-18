@@ -1,12 +1,16 @@
 import axios from 'axios';
 
 const state = {
-    all: []
+    all: [],
+    currentCategoryId: 0,
 };
 
 const getters = {};
 
 const mutations = {
+    SET_CURRENT_CATEGORY_ID(state, id) {
+        state.currentCategoryId = id;
+    },
     SET_CATEGORIES(state, categories) {
         state.all = categories;
     },
@@ -19,6 +23,9 @@ const mutations = {
 };
 
 const actions = {
+    setCurrentCategoryId(context, id) {
+        context.commit('SET_CURRENT_CATEGORY_ID', id);
+    },
     getCategories(context) {
         axios({
             method: "get",
@@ -39,7 +46,7 @@ const actions = {
                 "id": res.data.id,
                 "title": task
             });
-            this.commit('SET_CURRENT_CATEGORY_ID', res.data.id);
+            context.commit('SET_CURRENT_CATEGORY_ID', res.data.id);
         });
     },
     removeCategory(context, id) {

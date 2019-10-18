@@ -1,7 +1,11 @@
 <template>
     <section class="todo">
-        <h2 class="todo__title">Список задач:</h2>
-        <small class="todo__note" v-if="tasks[0]">Кликните дважды, чтобы отредактировать</small>
+        <h2 class="todo__title">Список задач ({{completedTasks.length}}):</h2>
+        <div class="todo__note">
+            <small v-if="tasks[0]">Кликните дважды, чтобы отредактировать</small>
+            <small class="todo__delete-all" v-if="completedTasks.length">Удалить завершённые</small>
+        </div>
+        <!--todo анимация? да пошла она в жопу, эта анимация!-->
         <ul class="todo__list">
             <li class="todo__item"
                 v-for="(task, index) in tasks"
@@ -31,19 +35,19 @@
                 >
                 <span class="todo__remove" @click="remove(task.id)">&#10008;</span>
             </li>
-            <li class="todo__item">
-                <span class="todo__add" v-if="isNewTask" @click="add">+</span>
-                <input
-                    class="todo__task"
-                    type="text"
-                    v-model="newTask"
-                    @keyup.enter="add"
-                    maxlength="255"
-                    placeholder="Добавить задачу"
-                    v-focus
-                >
-            </li>
         </ul>
+        <div class="todo__add-task">
+            <span class="todo__add" v-if="isNewTask" @click="add">+</span>
+            <input
+                class="todo__task"
+                type="text"
+                v-model="newTask"
+                @keyup.enter="add"
+                maxlength="255"
+                placeholder="Добавить задачу"
+                v-focus
+            >
+        </div>
     </section>
 </template>
 
@@ -66,15 +70,21 @@
         },
         computed: {
             tasks() {
-              return this.$store.state.tasks.all;
+                return this.$store.getters['tasks/getTasksByCategory'](this.$store.state.categories.currentCategoryId);
             },
             isNewTask() {
                 return this.newTask.trim() !== '';
+            },
+            completedTasks() {
+                return this.$store.state.tasks.all
+                    .filter(task => {
+                        return task.category_id === this.$store.state.categories.currentCategoryId && task.completed;
+                    });
             }
         },
         methods: {
             change(id) {
-                this.$store.dispatch('setCurrentTaskId', id);
+                this.$store.dispatch('tasks/setCurrentTaskId', id);
                 this.$store.dispatch('openStub');
             },
             add() {
@@ -86,12 +96,11 @@
 
             },
             remove(id) {
-                // let isDel = confirm('Вы хотите удалить задачу?');
-                // if (!isDel) {
-                //     return;
-                // }
+                let isDel = confirm('Удалить Задачу?');
+                if (!isDel) {
+                    return;
+                }
                 this.$store.dispatch('tasks/removeTask', id);
-
             },
             edit(task, index) {
                 this.editingIndex = index;
@@ -121,26 +130,38 @@
 <style lang="less">
     .todo {
 
-        &__title {}
+        &__title {
+        }
 
         &__note {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+        }
+
+        &__delete-all {
+            cursor: pointer;
+            transition: all .3s;
+
+            &:hover {
+                text-decoration: underline;
+                transform: scale(1.1);
+                transition: all .3s;
+            }
         }
 
         &__header {
             border-bottom: 1px solid black;
         }
 
-        &__list {}
+        &__list {
+            /*overflow: auto;*/
+        }
 
         &__item {
             position: relative;
-            border-bottom: 1px solid gray;
-
-            &:first-child {
-                border-top: 1px solid gray;
-            }
+            border-top: 1px solid gray;
 
             &:hover {
                 .todo__change {
@@ -153,6 +174,12 @@
                     transition: opacity .3s;
                 }
             }
+        }
+
+        &__add-task {
+            position: relative;
+            border-top: 1px solid gray;
+            border-bottom: 1px solid gray;
         }
 
         &__add {

@@ -16,9 +16,7 @@
     export default {
         name: 'Navigation',
         data() {
-            return {
-
-            }
+            return {}
         },
         computed: {
             routes() {

@@ -10,6 +10,7 @@
                         <div class="app__inner-head"></div>
                         <div class="app__inner-wrap">
                             <transition
+                                appear
                                 mode="out-in"
                                 enter-active-class="animated slideInDown"
                                 leave-active-class="animated slideOutUp">
@@ -142,7 +143,6 @@
 
         &__inner-wrap {
             overflow: hidden;
-            height: 100%;
-        }
+         }
     }
 </style>

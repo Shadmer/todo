@@ -1,19 +1,24 @@
 import axios from 'axios';
 
 const state = {
-    all: []
+    all: [],
+    currentTaskId: 0,
 };
 
 const getters = {
-    // getTasksByCategory: state => category => {
-    //     let filtered = state.all;
-    //     filter(task => {
-    //         return category
-    //     })
-    // }
+    getTasksByCategory: state => category => {
+        let filtered = state.all.filter(task => {
+            return task.category_id === category;
+        });
+
+        return filtered;
+    }
 };
 
 const mutations = {
+    SET_CURRENT_TASK_ID(state, id) {
+        state.currentTaskId = id;
+    },
     SET_TASKS(state, tasks) {
         state.all = tasks;
     },
@@ -21,7 +26,6 @@ const mutations = {
         state.all.push(task);
     },
     REMOVE_TASK(state, id) {
-
         // state.all.forEach((task, i) => {
         //     if (task.id === id) {
         //         state.all.splice(i, 1);
@@ -37,6 +41,9 @@ const mutations = {
 };
 
 const actions = {
+    setCurrentTaskId(context, id) {
+        context.commit('SET_CURRENT_TASK_ID', id);
+    },
     getTasks(context) {
         axios({
             method: "get",
@@ -48,7 +55,7 @@ const actions = {
     addTask(context, task) {
         let FD = new FormData();
         FD.append("title", task);
-        FD.append("category_id", this.state.currentCategoryId);
+        FD.append("category_id", this.state.categories.currentCategoryId);
         axios({
             method: "post",
             url: "/api/task/add",
@@ -57,7 +64,8 @@ const actions = {
             context.commit('ADD_TASK', {
                 "id": res.data.id,
                 "title": task,
-                "category_id": this.state.currentCategoryId,
+                "completed": false,
+                "category_id": this.state.categories.currentCategoryId,
                 "editing": false,
             })
         });
