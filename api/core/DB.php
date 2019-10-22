@@ -6,7 +6,6 @@ class DB
 {
     private static $instance;
 
-    // Шоб один раз к БД подключаться
     public static function connect()
     {
         if (self::$instance === null) {

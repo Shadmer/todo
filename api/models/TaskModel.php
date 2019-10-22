@@ -54,4 +54,16 @@ class TaskModel extends BaseModel
             'id' => (int)$id
         ];
     }
+
+    public function deleteCompletedTasks($id)
+    {
+        $sql = "DELETE FROM `tasks` WHERE category_id = :category_id and completed = 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'category_id' => $id,
+        ]);
+        return [
+            'id' => (int)$id
+        ];
+    }
 }

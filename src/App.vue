@@ -100,7 +100,7 @@
 
         &__inner {
             position: relative;
-            min-height: 70vh;
+            min-height: 400px;
             padding: 60px 40px 20px;
             background-color: #fff;
             border: 5px solid #eff2f7;

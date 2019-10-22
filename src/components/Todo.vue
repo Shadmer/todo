@@ -1,11 +1,13 @@
 <template>
     <section class="todo">
-        <h2 class="todo__title">Список задач ({{completedTasks.length}}):</h2>
+        <h2 class="todo__title">Список задач ({{tasks.length - completedTasks.length}}):</h2>
         <div class="todo__note">
-            <small v-if="tasks[0]">Кликните дважды, чтобы отредактировать</small>
-            <small class="todo__delete-all" v-if="completedTasks.length">Удалить завершённые</small>
+            <small v-if="tasks.length">Кликните дважды, чтобы отредактировать</small>
+            <small class="todo__delete-all"
+                   v-if="completedTasks.length"
+                   @click="removeCompleted()"
+            >Удалить завершённые</small>
         </div>
-        <!--todo анимация? да пошла она в жопу, эта анимация!-->
         <ul class="todo__list">
             <li class="todo__item"
                 v-for="(task, index) in tasks"
@@ -21,7 +23,7 @@
                 <span class="todo__task"
                       :class="{'todo__task--completed': task.completed}"
                       v-if="index !== editingIndex"
-                      @dblclick="edit(task, index)"
+                      @dblclick="startEdit(task, index)"
                 >{{task.title}}</span>
                 <input class="todo__task"
                        v-else
@@ -102,7 +104,7 @@
                 }
                 this.$store.dispatch('tasks/removeTask', id);
             },
-            edit(task, index) {
+            startEdit(task, index) {
                 this.editingIndex = index;
                 this.cashTask = task.title;
             },
@@ -122,7 +124,13 @@
                 this.editingIndex = null;
                 this.cashTask = '';
             },
-
+            removeCompleted() {
+                let isDel = confirm('Удалить завершённые задачи?');
+                if (!isDel) {
+                    return;
+                }
+                this.$store.dispatch('tasks/removeCompletedTasks', this.$store.state.categories.currentCategoryId);
+            }
         },
     }
 </script>

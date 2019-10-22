@@ -26,17 +26,16 @@ const mutations = {
         state.all.push(task);
     },
     REMOVE_TASK(state, id) {
-        // state.all.forEach((task, i) => {
-        //     if (task.id === id) {
-        //         state.all.splice(i, 1);
-        //         return;
-        //     }
-        // });
-
         state.all = state.all.filter(task => task.id !== id);
     },
-    REMOVE_TASK_BY_CATEGORY_ID(state, id) {
+    REMOVE_TASKS_BY_CATEGORY_ID(state, id) {
         state.all = state.all.filter(task => task.category_id !== id);
+    },
+    REMOVE_COMPLETED_TASKS(state) {
+        state.all = state.all
+            .filter(task =>
+                task.category_id !== this.state.categories.currentCategoryId
+                || (task.category_id === this.state.categories.currentCategoryId && !task.completed));
     }
 };
 
@@ -89,12 +88,20 @@ const actions = {
             data: USP
         })
     },
-    removeTaskByCategoryId(context, id) {
+    removeTasksByCategoryId(context, id) {
         axios({
             method: "delete",
             url: "/api/task/delete/category/" + id,
         }).then(() => {
-            context.commit('REMOVE_TASK_BY_CATEGORY_ID', id);
+            context.commit('REMOVE_TASKS_BY_CATEGORY_ID', id);
+        });
+    },
+    removeCompletedTasks(context, id) {
+        axios({
+            method: "delete",
+            url: "/api/task/delete/completed/" + id,
+        }).then(() => {
+            context.commit('REMOVE_COMPLETED_TASKS');
         });
     }
 };

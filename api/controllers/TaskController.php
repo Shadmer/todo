@@ -50,4 +50,10 @@ class TaskController
         exit;
     }
 
+    public function actionDeleteCompletedTasks($id)
+    {
+        echo json_encode($this->pdo->deleteCompletedTasks($id));
+        exit;
+    }
+
 }

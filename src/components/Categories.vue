@@ -71,7 +71,7 @@
                     return;
                 }
                 this.$store.dispatch('categories/removeCategory', id);
-                this.$store.dispatch('tasks/removeTaskByCategoryId', id);
+                this.$store.dispatch('tasks/removeTasksByCategoryId', id);
                 if (this.$store.state.categories.currentCategoryId === id) {
                     this.$store.dispatch('categories/setCurrentCategoryId', 0);
                 }
