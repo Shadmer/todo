@@ -66,7 +66,7 @@
         data() {
             return {
                 newTask: '',
-                cashTask: '',
+                cacheTask: '',
                 editingIndex: null
             }
         },
@@ -82,7 +82,7 @@
                     .filter(task => {
                         return task.category_id === this.$store.state.categories.currentCategoryId && task.completed;
                     });
-            }
+            },
         },
         methods: {
             change(id) {
@@ -106,23 +106,23 @@
             },
             startEdit(task, index) {
                 this.editingIndex = index;
-                this.cashTask = task.title;
+                this.cacheTask = task.title;
             },
             cancelEdit(task) {
-                task.title = this.cashTask;
+                task.title = this.cacheTask;
                 this.editingIndex = null;
-                this.cashTask = '';
+                this.cacheTask = '';
 
             },
             doneEdit(task) {
                 if (task.title.trim() === '') {
-                    task.title = this.cashTask;
+                    task.title = this.cacheTask;
                     this.editingIndex = null;
                     return;
                 }
                 this.$store.dispatch('tasks/editTask', task);
                 this.editingIndex = null;
-                this.cashTask = '';
+                this.cacheTask = '';
             },
             removeCompleted() {
                 let isDel = confirm('Удалить завершённые задачи?');

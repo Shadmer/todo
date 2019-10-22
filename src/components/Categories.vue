@@ -40,9 +40,23 @@
             },
             isNewCategory() {
                 return this.newCategory.trim() !== '';
+            },
+            isSameCategory() {
+                return this.$store.state.categories.all.find(category => category.title === this.newCategory);
             }
         },
         methods: {
+            checkSameCategory(cache, n) {
+                if (!this.isSameCategory) {
+                    return;
+                }
+                if (!cache) {
+                    cache = this.newCategory;
+                    n = 1;
+                }
+                this.newCategory = cache + " (" + n++ + ")";
+                this.checkSameCategory(cache, n);
+            },
             isCategoryActive(id) {
                 return this.$store.state.categories.currentCategoryId === id && !this.$store.state.tasks.currentTaskId;
             },
@@ -62,6 +76,7 @@
                 if (!this.isNewCategory) {
                     return;
                 }
+                this.checkSameCategory();
                 this.$store.dispatch('categories/addCategory', this.newCategory);
                 this.newCategory = '';
             },
