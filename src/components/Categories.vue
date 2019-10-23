@@ -3,12 +3,12 @@
         <h2 class="categories__title">Категории:</h2>
         <ul class="categories__list">
             <li class="categories__item"
-                :class="{'categories__item--active': isCategoryActive(0)}"
+                :class="{'categories__item--active': $store.state.categories.currentCategoryId === 0 && !$store.state.tasks.currentTaskId}"
                 @click="chooseCategory(0)">Без категории</li>
             <li class="categories__item"
                 v-for="(category, index) in categories"
                 :key="index"
-                :class="{'categories__item--active': isCategoryActive(category.id)}"
+                :class="{'categories__item--active': $store.state.categories.currentCategoryId === category.id && !$store.state.tasks.currentTaskId}"
                 @click="chooseCategory(category.id)"
             >
                 <span>{{ category.title }}</span>
@@ -56,9 +56,6 @@
                 }
                 this.newCategory = cache + " (" + n++ + ")";
                 this.checkSameCategory(cache, n);
-            },
-            isCategoryActive(id) {
-                return this.$store.state.categories.currentCategoryId === id && !this.$store.state.tasks.currentTaskId;
             },
             chooseCategory(id) {
                 if (this.$store.state.tasks.currentTaskId) {

@@ -23,8 +23,9 @@ export default new Vuex.Store({
             context.commit('OPEN_STUB');
         },
         closeStub(context) {
+            this.dispatch('categories/setCurrentCategoryId', this.state.categories.currentCategoryId);
+            this.dispatch('tasks/setCurrentTaskId', 0);
             context.commit('CLOSE_STUB');
-            // context.commit('SET_CURRENT_TASK_ID', 0);
         },
     },
     modules: {
