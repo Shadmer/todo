@@ -19,6 +19,7 @@
              is="AddItem"
              @add="addCategory"
              modifier="small"
+             :isFocus="false"
         ></div>
     </section>
 </template>

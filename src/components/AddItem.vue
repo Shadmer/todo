@@ -8,6 +8,7 @@
                @keyup.enter="add"
                maxlength="255"
                placeholder="Добавить ... "
+               v-focus="isFocus"
         >
     </div>
 </template>
@@ -16,7 +17,17 @@
     export default {
         name: "AddItem",
         props: {
-            'modifier': String
+            'modifier': String,
+            'isFocus': Boolean
+        },
+        directives: {
+            focus: {
+                inserted: function (el, binding) {
+                    if (binding.value) {
+                        el.focus()
+                    }
+                }
+            }
         },
         data() {
             return {

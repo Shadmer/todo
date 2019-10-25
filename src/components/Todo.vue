@@ -41,6 +41,7 @@
         <div class="todo__add"
              is="AddItem"
              @add="addTask"
+             :isFocus="true"
         ></div>
     </section>
 </template>
@@ -52,13 +53,6 @@
         name: "Todo",
         components: {
             AddItem
-        },
-        directives: {
-            focus: {
-                inserted: function (el) {
-                    el.focus()
-                }
-            }
         },
         data() {
             return {
