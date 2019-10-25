@@ -1,6 +1,6 @@
 <template>
     <section class="todo">
-        <h2 class="todo__title">Список задач ({{tasks.length - completedTasks.length}}):</h2>
+        <h2 class="todo__title">Список задач ({{tasksCount}}):</h2>
         <div class="todo__note">
             <small v-if="tasks.length">Кликните дважды, чтобы отредактировать</small>
             <small class="todo__delete-all"
@@ -38,24 +38,21 @@
                 <span class="todo__remove" @click="remove(task.id)">&#10008;</span>
             </li>
         </ul>
-        <div class="todo__add-task">
-            <span class="todo__add" v-if="isNewTask" @click="add">+</span>
-            <input
-                class="todo__task"
-                type="text"
-                v-model="newTask"
-                @keyup.enter="add"
-                maxlength="255"
-                placeholder="Добавить задачу"
-                v-focus
-            >
-        </div>
+        <div class="todo__add"
+             is="AddItem"
+             @add="addTask"
+        ></div>
     </section>
 </template>
 
 <script>
+    import AddItem from "@/components/AddItem";
+
     export default {
         name: "Todo",
+        components: {
+            AddItem
+        },
         directives: {
             focus: {
                 inserted: function (el) {
@@ -74,28 +71,24 @@
             tasks() {
                 return this.$store.getters['tasks/getTasksByCategory'](this.$store.state.categories.currentCategoryId);
             },
-            isNewTask() {
-                return this.newTask.trim() !== '';
-            },
             completedTasks() {
                 return this.$store.state.tasks.all
                     .filter(task => {
                         return task.category_id === this.$store.state.categories.currentCategoryId && task.completed;
                     });
             },
+            tasksCount() {
+               return this.tasks.length - this.completedTasks.length;
+            }
+
         },
         methods: {
             change(id) {
                 this.$store.dispatch('tasks/setCurrentTaskId', id);
-                this.$store.dispatch('openStub');
+                this.$store.dispatch('stub/openStub');
             },
-            add() {
-                if (!this.isNewTask) {
-                    return;
-                }
-                this.$store.dispatch('tasks/addTask', this.newTask);
-                this.newTask = '';
-
+            addTask(title) {
+                this.$store.dispatch('tasks/addTask', title);
             },
             remove(id) {
                 let isDel = confirm('Удалить Задачу?');
@@ -164,7 +157,7 @@
         }
 
         &__list {
-            /*overflow: auto;*/
+
         }
 
         &__item {
@@ -182,21 +175,6 @@
                     transition: opacity .3s;
                 }
             }
-        }
-
-        &__add-task {
-            position: relative;
-            border-top: 1px solid gray;
-            border-bottom: 1px solid gray;
-        }
-
-        &__add {
-            position: absolute;
-            top: 50%;
-            margin-top: -25px;
-            left: 10px;
-            font-size: 32px;
-            cursor: pointer;
         }
 
         &__change {

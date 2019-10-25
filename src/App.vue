@@ -1,11 +1,10 @@
 <template>
     <div id="app" class="app">
-        <div class="app__stub" v-if="$store.state.stub" @click="closeStub()">
-        </div>
+        <div is="Stub"></div>
         <main class="app__main">
             <div class="app__container">
                 <div class="app__content">
-                    <navigation class="app__nav"/>
+                    <nav class="app__nav" is="navigation"></nav>
                     <div class="app__inner">
                         <div class="app__inner-head"></div>
                         <div class="app__inner-wrap">
@@ -26,11 +25,13 @@
 
 <script>
     import Navigation from '@/components/Navigation';
+    import Stub from '@/components/Stub';
 
     export default {
         name: 'App',
         components: {
-            Navigation
+            Navigation,
+            Stub
         },
         created() {
             this.$store.dispatch('tasks/getTasks');
@@ -39,12 +40,6 @@
         data() {
             return {
                 routes: this.$router.options.routes,
-                isStub: this.$store.state.stub
-            }
-        },
-        methods: {
-            closeStub() {
-                this.$store.dispatch('closeStub');
             }
         }
     }
@@ -61,17 +56,6 @@
         display: flex;
         min-height: 100vh;
         flex-direction: column;
-
-        &__stub {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, .6);
-            cursor: pointer;
-            z-index: 1000;
-        }
 
         &__main {
             flex: auto;

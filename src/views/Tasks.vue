@@ -1,11 +1,7 @@
 <template>
     <div class="tasks">
-        <div class="tasks__list">
-            <todo/>
-        </div>
-        <div class="tasks__categories">
-            <categories/>
-        </div>
+        <section class="tasks__list" is="Todo"></section>
+        <section class="tasks__categories" is="Categories"></section>
     </div>
 </template>
 

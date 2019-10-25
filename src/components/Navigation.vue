@@ -1,5 +1,5 @@
 <template>
-    <div class="navigation">
+    <nav class="navigation">
         <router-link
             v-for="(route, index) in routes"
             :key="index"
@@ -9,7 +9,7 @@
         >
            {{route.name}}
         </router-link>
-    </div>
+    </nav>
 </template>
 
 <script>
