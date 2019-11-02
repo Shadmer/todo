@@ -49,6 +49,16 @@ const actions = {
             context.commit('SET_CURRENT_CATEGORY_ID', res.data.id);
         });
     },
+    editCategory(context, category){
+        let USP = new URLSearchParams();
+        USP.append("title", category.title);
+        axios({
+            method: "put",
+            url: "/api/category/edit/" + category.id,
+            data: USP
+        })
+
+    },
     removeCategory(context, id) {
         axios({
             method: "delete",

@@ -23,4 +23,18 @@ class CategoryModel extends BaseModel
             'id' => (int)$id,
         ];
     }
+
+    public function edit($id, $data)
+    {
+        $sql = "UPDATE `categories` SET `title`= :title WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'id' => $id,
+            'title' => $data['title'],
+        ]);
+        return [
+            'id' => (int)$id,
+            'title' => $data['title'],
+        ];
+    }
 }
