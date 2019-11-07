@@ -46,7 +46,7 @@ const actions = {
     getTasks(context) {
         axios({
             method: "get",
-            url: "/api/task/get",
+            url: "/api/task",
         }).then((res) => {
             context.commit('SET_TASKS', res.data);
         });

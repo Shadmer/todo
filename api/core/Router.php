@@ -30,25 +30,40 @@ class Router
 
     public function run()
     {
+
         $uri = $this->getUri();
+        $isError = true;
 
         foreach ($this->routes as $uriPattern => $path) {
             if (preg_match("~$uriPattern~", $uri)) {
-
                 $segments = $this->getSegments($uriPattern, $path, $uri);
                 $controllerName = ucfirst(array_shift($segments) . 'Controller');
                 $actionName = 'action' . ucfirst(array_shift($segments));
                 $parameters = $segments;
 
                 $controllerName = sprintf('controllers\%s', $controllerName);
-                $controller = new $controllerName;
-                $controller = call_user_func_array(array($controller, $actionName), $parameters);
+                $controller = new $controllerName(DB::connect());
 
-                if ($controller != null) {
-                    break;
+                //Проверка на существование экшена
+                if (method_exists($controller, $actionName)){
+                    $controller = call_user_func_array(array($controller, $actionName), $parameters);
+                } else {
+                    $controller = new \controllers\ErrorController;
+                    $controller->throwHttpError('error', 'bad request');
                 }
 
+
+
+                if ($controller != null) {
+                    $isError = false;
+                    break;
+                }
             }
+        }
+        //Если нет контроллера
+        if ($isError) {
+            $controller = new \controllers\ErrorController;
+            $controller->throwHttpError('error', 'bad request');
         }
     }
 }
