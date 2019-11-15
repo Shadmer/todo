@@ -10,7 +10,6 @@ const getters = {
         let filtered = state.all.filter(task => {
             return task.category_id === category;
         });
-
         return filtered;
     }
 };
@@ -44,12 +43,24 @@ const actions = {
         context.commit('SET_CURRENT_TASK_ID', id);
     },
     getTasks(context) {
-        axios({
-            method: "get",
-            url: "/api/task",
-        }).then((res) => {
-            context.commit('SET_TASKS', res.data);
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "get",
+                url: "/api/task",
+            }).then((res) => {
+                context.commit('SET_TASKS', res.data);
+                resolve(res);
+            } ,error => {
+                reject(error);
+            });
         });
+
+        // axios({
+        //     method: "get",
+        //     url: "/api/task",
+        // }).then((res) => {
+        //     context.commit('SET_TASKS', res.data);
+        // });
     },
     addTask(context, task) {
         let FD = new FormData();

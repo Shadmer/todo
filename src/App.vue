@@ -34,7 +34,15 @@
             Stub
         },
         created() {
-            this.$store.dispatch('tasks/getTasks');
+            this.$store.dispatch('tasks/getTasks').then(
+                response => {
+                    
+                },
+                error => {
+                    console.log(error.response);
+                }
+            );
+
             this.$store.dispatch('categories/getCategories');
         },
         data() {

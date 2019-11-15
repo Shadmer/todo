@@ -4,11 +4,11 @@ namespace core;
 
 class Router
 {
-    private $routes;
+//    private $routes;
 
-    public function __construct($routesPath)
+    public function __construct()
     {
-        $this->routes = include($routesPath);
+//        $this->routes = include($routesPath);
     }
 
     private function getUri()
@@ -18,52 +18,48 @@ class Router
         }
     }
 
-    private function getSegments($uriPattern, $path, $uri)
-    {
-        $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
-        $segments = explode('/', $internalRoute);
-        unset($segments[0]);
-        $segments = array_values($segments);
-        return $segments;
+    private function getFormData($method) {
+        switch ($method)
+        {
+            case 'GET':
+                $data = $_GET;
+                break;
+            case 'POST':
+                $data = $_POST;
+                break;
+            default:
+                parse_str(file_get_contents('php://input'), $data);
+        }
+        return $data;
     }
 
+    private function getRequestData()
+    {
+        $method = $_SERVER['REQUEST_METHOD'];
+        $urlData = explode('/', $this->getUri());
+        $router = array_shift($urlData);
+
+        return [
+            'method' => $method,
+            'formData' => $this->getFormData($method),
+            'urlData' => $urlData,
+            'router' => $router
+        ];
+    }
+
+    private function isValidRouter($router)
+    {
+        return in_array($router, [
+            'category',
+            'task'
+        ]);
+    }
 
     public function run()
     {
-
-        $uri = $this->getUri();
-        $isError = true;
-
-        foreach ($this->routes as $uriPattern => $path) {
-            if (preg_match("~$uriPattern~", $uri)) {
-                $segments = $this->getSegments($uriPattern, $path, $uri);
-                $controllerName = ucfirst(array_shift($segments) . 'Controller');
-                $actionName = 'action' . ucfirst(array_shift($segments));
-                $parameters = $segments;
-
-                $controllerName = sprintf('controllers\%s', $controllerName);
-                $controller = new $controllerName(DB::connect());
-
-                //Проверка на существование экшена
-                if (method_exists($controller, $actionName)){
-                    $controller = call_user_func_array(array($controller, $actionName), $parameters);
-                } else {
-                    $controller = new \controllers\ErrorController;
-                    $controller->throwHttpError('error', 'bad request');
-                }
-
-
-
-                if ($controller != null) {
-                    $isError = false;
-                    break;
-                }
-            }
-        }
-        //Если нет контроллера
-        if ($isError) {
-            $controller = new \controllers\ErrorController;
-            $controller->throwHttpError('error', 'bad request');
-        }
+//        echo '<pre>';
+//        print_r($this->getRequestData());
+        require_once ROOT . '/dist/index.html';
+        die;
     }
 }
