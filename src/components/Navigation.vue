@@ -20,7 +20,9 @@
         },
         computed: {
             routes() {
-                return this.$router.options.routes
+                let routes = this.$router.options.routes;
+                routes.pop();
+                return routes;
             },
         },
         methods:{

@@ -4,11 +4,15 @@ namespace core;
 
 class Router
 {
-//    private $routes;
+    private $requestData;
+    private $routes;
+    private $helpers;
 
-    public function __construct()
+    public function __construct($routes, $helpers)
     {
-//        $this->routes = include($routesPath);
+        $this->requestData = $this->getRequestData();
+        $this->routes = $routes;
+        $this->helpers = $helpers;
     }
 
     private function getUri()
@@ -39,27 +43,47 @@ class Router
         $urlData = explode('/', $this->getUri());
         $router = array_shift($urlData);
 
-        return [
-            'method' => $method,
-            'formData' => $this->getFormData($method),
-            'urlData' => $urlData,
-            'router' => $router
-        ];
-    }
 
-    private function isValidRouter($router)
-    {
-        return in_array($router, [
-            'category',
-            'task'
-        ]);
+        if ($router === 'api') {
+            return [
+                'method' => $method,
+                'formData' => $this->getFormData($method),
+                'controller' => array_shift($urlData),
+                'action' => array_shift($urlData),
+                'id' => array_shift($urlData),
+            ];
+        } else {
+            return false;
+        }
     }
 
     public function run()
     {
-//        echo '<pre>';
-//        print_r($this->getRequestData());
-        require_once ROOT . '/dist/index.html';
-        die;
+        if ($this->requestData) {
+            if (in_array($this->requestData['controller'], $this->routes)) {
+                $controllerName = ucfirst($this->requestData['controller']) . 'Controller';
+                $controllerName = sprintf('controllers\%s', $controllerName);
+                $actionName = 'action' . ucfirst($this->requestData['action']);
+                $controller = new $controllerName(DB::connect());
+
+
+                if (method_exists($controller, $actionName)) {
+                    call_user_func_array(
+                        array($controller, $actionName),
+                        array($this->requestData['id'], $this->requestData['formData'])
+                    );
+                } else {
+                    $this->helpers->throwHttpError(404, 'action not found');
+                }
+
+
+            } else {
+                $this->helpers->throwHttpError(404, 'controller not found');
+            }
+        } else {
+            require_once ROOT . '/dist/index.html';
+        }
+
+
     }
 }

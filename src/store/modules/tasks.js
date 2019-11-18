@@ -46,7 +46,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios({
                 method: "get",
-                url: "/api/task",
+                url: "/api/task/get",
             }).then((res) => {
                 context.commit('SET_TASKS', res.data);
                 resolve(res);
@@ -102,7 +102,7 @@ const actions = {
     removeTasksByCategoryId(context, id) {
         axios({
             method: "delete",
-            url: "/api/task/delete/category/" + id,
+            url: "/api/task/deleteByCategoryId/" + id,
         }).then(() => {
             context.commit('REMOVE_TASKS_BY_CATEGORY_ID', id);
         });
@@ -110,7 +110,7 @@ const actions = {
     removeCompletedTasks(context, id) {
         axios({
             method: "delete",
-            url: "/api/task/delete/completed/" + id,
+            url: "/api/task/deleteCompletedTasks/" + id,
         }).then(() => {
             context.commit('REMOVE_COMPLETED_TASKS');
         });

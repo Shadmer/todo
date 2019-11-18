@@ -2,6 +2,7 @@
 
 define('ROOT', __DIR__);
 $config = include_once (__DIR__ . '/config.php');
+$routes = include (__DIR__ . '/api/config/routes.php');
 
 if ($config['devMode']) {
     header('Access-Control-Allow-Origin: *');
@@ -15,5 +16,6 @@ if ($config['devMode']) {
 }
 
 require_once __DIR__ . '/api/core/Autoload.php';
+$helpers = new \core\Helpers();
 
-(new \core\Router())->run();
+(new \core\Router($routes, $helpers))->run();

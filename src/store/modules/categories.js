@@ -29,7 +29,7 @@ const actions = {
     getCategories(context) {
         axios({
             method: "get",
-            url: "/api/category",
+            url: "/api/category/get",
         }).then((res) => {
             context.commit('SET_CATEGORIES', res.data);
         });

@@ -23,5 +23,10 @@ export default new Router({
             name: 'Кабинет',
             component: () => import('./views/Cabinet.vue')
         },
+        {
+            path: '*',
+            name: 'NotFound',
+            component: () => import('./views/NotFound.vue')
+        },
     ]
 })
