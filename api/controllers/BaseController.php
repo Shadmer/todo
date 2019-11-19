@@ -19,7 +19,6 @@ abstract class BaseController
         echo json_encode($this->pdo->getAll());
     }
 
-
     public function actionAdd()
     {
         echo json_encode($this->pdo->add($_POST));
