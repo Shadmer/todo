@@ -60,6 +60,11 @@ class Router
     {
         if ($this->requestData) {
 
+            $_SESSION['user'] = 1;
+            if (!$_SESSION['user']) {
+                $this->helpers->throwHttpError('400', 'Гуляй');
+            }
+
             if (in_array($this->requestData['controller'], $this->routes)) {
                 $controllerName = ucfirst($this->requestData['controller']) . 'Controller';
                 $controllerName = sprintf('controllers\%s', $controllerName);
@@ -73,13 +78,13 @@ class Router
                         array($this->requestData['id'], $this->requestData['formData'])
                     );
                 } else {
-                    $this->helpers->throwHttpError('invalid_parameters', 'invalid_parameters');
+                    $this->helpers->throwHttpError('400', 'invalid_parameters');
                 }
 
-
             } else {
-                $this->helpers->throwHttpError('bad_request', 'bad_request');
+                $this->helpers->throwHttpError('400', 'bad_request');
             }
+
         } else {
             require_once ROOT . '/dist/index.html';
         }

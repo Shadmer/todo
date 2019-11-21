@@ -51,7 +51,14 @@
         },
         methods: {
             addTask(title) {
-                this.$store.dispatch('tasks/addTask', title);
+                this.$store.dispatch('tasks/addTask', title).then(
+                    respones => {
+                        alert('ok!');
+                    },
+                    error => {
+                        alert('fuck!');
+                    }
+                );
             },
             removeCompleted() {
                 let isDel = confirm('Удалить завершённые задачи?');

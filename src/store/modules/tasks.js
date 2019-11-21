@@ -50,7 +50,7 @@ const actions = {
             }).then((res) => {
                 context.commit('SET_TASKS', res.data);
                 resolve(res);
-            } ,error => {
+            }, error => {
                 reject(error);
             });
         });
@@ -66,18 +66,24 @@ const actions = {
         let FD = new FormData();
         FD.append("title", task);
         FD.append("category_id", this.state.categories.currentCategoryId);
-        axios({
-            method: "post",
-            url: "/api/task/add",
-            data: FD
-        }).then((res) => {
-            context.commit('ADD_TASK', {
-                "id": res.data.id,
-                "title": task,
-                "completed": false,
-                "category_id": this.state.categories.currentCategoryId,
-                "editing": false,
-            })
+
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "post",
+                url: "/api/task/add",
+                data: FD
+            }).then((res) => {
+                context.commit('ADD_TASK', {
+                    "id": res.data.id,
+                    "title": task,
+                    "completed": false,
+                    "category_id": this.state.categories.currentCategoryId,
+                    "editing": false,
+                });
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
         });
     },
     removeTask(context, id) {

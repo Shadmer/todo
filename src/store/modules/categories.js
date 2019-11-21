@@ -27,11 +27,16 @@ const actions = {
         context.commit('SET_CURRENT_CATEGORY_ID', id);
     },
     getCategories(context) {
-        axios({
-            method: "get",
-            url: "/api/category/get",
-        }).then((res) => {
-            context.commit('SET_CATEGORIES', res.data);
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "get",
+                url: "/api/category/get",
+            }).then((res) => {
+                context.commit('SET_CATEGORIES', res.data);
+                resolve(res);
+            }, error => {
+                reject(error);
+            })
         });
     },
     addCategory(context, task) {

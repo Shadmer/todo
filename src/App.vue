@@ -36,7 +36,7 @@
         created() {
             this.$store.dispatch('tasks/getTasks').then(
                 response => {
-                    
+
                 },
                 error => {
                     console.log(error.response);
