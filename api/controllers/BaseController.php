@@ -4,9 +4,9 @@ namespace controllers;
 
 abstract class BaseController
 {
-    protected $pdo;
-    protected $model;
     protected $db;
+    protected $model;
+    protected $pdo;
 
     public function __construct($db, $model)
     {

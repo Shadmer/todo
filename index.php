@@ -14,13 +14,8 @@ if ($config['devMode']) {
     error_reporting(E_ALL);
 }
 
-
 session_start();
 
 require_once __DIR__ . '/api/core/Autoload.php';
 
-$routes = include (__DIR__ . '/api/config/routes.php');
-
-$helpers = new \core\Helpers();
-
-(new \core\Router($routes, $helpers))->run();
+(new \core\Router())->run();

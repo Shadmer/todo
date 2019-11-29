@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import tasks from './modules/tasks';
 import categories from './modules/categories';
+import users from './modules/users';
 import stub from './modules/stub';
 
 Vue.use(Vuex);
@@ -11,6 +12,7 @@ export default new Vuex.Store({
     modules: {
         tasks,
         categories,
+        users,
         stub
     }
 });

@@ -8,11 +8,11 @@ class Router
     private $routes;
     private $helpers;
 
-    public function __construct($routes, $helpers)
+    public function __construct()
     {
         $this->requestData = $this->getRequestData();
-        $this->routes = $routes;
-        $this->helpers = $helpers;
+        $this->routes = include (ROOT . '/api/config/routes.php');
+        $this->helpers = new Helpers();
     }
 
     private function getUri()
@@ -49,7 +49,7 @@ class Router
                 'formData' => $this->getFormData($method),
                 'controller' => array_shift($urlData),
                 'action' => array_shift($urlData),
-                'id' => array_shift($urlData),
+                'params' => array_shift($urlData),
             ];
         } else {
             return false;
@@ -60,10 +60,10 @@ class Router
     {
         if ($this->requestData) {
 
-            $_SESSION['user'] = 1;
-            if (!$_SESSION['user']) {
-                $this->helpers->throwHttpError('400', 'Гуляй');
-            }
+//            $_SESSION['user'] = 1;
+//            if (!$_SESSION['user']) {
+//                $this->helpers->throwHttpError('400', 'Гуляй');
+//            }
 
             if (in_array($this->requestData['controller'], $this->routes)) {
                 $controllerName = ucfirst($this->requestData['controller']) . 'Controller';
@@ -71,11 +71,10 @@ class Router
                 $actionName = 'action' . ucfirst($this->requestData['action']);
                 $controller = new $controllerName(DB::connect());
 
-                //todo можно сделать нормальную валидацию параметров, если не будет лениво
                 if (method_exists($controller, $actionName)) {
                     call_user_func_array(
                         array($controller, $actionName),
-                        array($this->requestData['id'], $this->requestData['formData'])
+                        array($this->requestData['params'], $this->requestData['formData'])
                     );
                 } else {
                     $this->helpers->throwHttpError('400', 'invalid_parameters');

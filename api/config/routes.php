@@ -3,4 +3,5 @@
 return [
     'task',
     'category',
+    'user'
 ];
