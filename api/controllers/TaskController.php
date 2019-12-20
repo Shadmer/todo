@@ -5,9 +5,9 @@ namespace controllers;
 class TaskController extends BaseController
 {
 
-    public function __construct($db)
+    public function __construct($db, $helpers)
     {
-        parent::__construct($db, "\models\TaskModel");
+        parent::__construct($db, $helpers, "\models\TaskModel");
     }
 
     public function actionDeleteByCategoryId($id)

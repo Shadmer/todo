@@ -11,7 +11,7 @@ class Router
     public function __construct()
     {
         $this->requestData = $this->getRequestData();
-        $this->routes = include (ROOT . '/api/config/routes.php');
+        $this->routes = include(ROOT . '/api/config/routes.php');
         $this->helpers = new Helpers();
     }
 
@@ -22,9 +22,9 @@ class Router
         }
     }
 
-    private function getFormData($method) {
-        switch ($method)
-        {
+    private function getFormData($method)
+    {
+        switch ($method) {
             case 'GET':
                 $data = $_GET;
                 break;
@@ -58,34 +58,28 @@ class Router
 
     public function run()
     {
-        if ($this->requestData) {
+        if (!$this->requestData) {
+            require_once ROOT . '/dist/index.html';
+            die;
+        }
 
-//            $_SESSION['user'] = 1;
-//            if (!$_SESSION['user']) {
-//                $this->helpers->throwHttpError('400', 'Гуляй');
-//            }
+        if (in_array($this->requestData['controller'], $this->routes)) {
+            $controllerName = ucfirst($this->requestData['controller']) . 'Controller';
+            $controllerName = sprintf('controllers\%s', $controllerName);
+            $actionName = 'action' . ucfirst($this->requestData['action']);
+            $controller = new $controllerName(DB::connect(), $this->helpers);
 
-            if (in_array($this->requestData['controller'], $this->routes)) {
-                $controllerName = ucfirst($this->requestData['controller']) . 'Controller';
-                $controllerName = sprintf('controllers\%s', $controllerName);
-                $actionName = 'action' . ucfirst($this->requestData['action']);
-                $controller = new $controllerName(DB::connect());
-
-                if (method_exists($controller, $actionName)) {
-                    call_user_func_array(
-                        array($controller, $actionName),
-                        array($this->requestData['params'], $this->requestData['formData'])
-                    );
-                } else {
-                    $this->helpers->throwHttpError('400', 'invalid_parameters');
-                }
-
+            if (method_exists($controller, $actionName)) {
+                call_user_func_array(
+                    array($controller, $actionName),
+                    array($this->requestData['params'], $this->requestData['formData'])
+                );
             } else {
-                $this->helpers->throwHttpError('400', 'bad_request');
+                $this->helpers->throwHttpError('400', 'invalid_parameters');
             }
 
         } else {
-            require_once ROOT . '/dist/index.html';
+            $this->helpers->throwHttpError('400', 'bad_request');
         }
 
 

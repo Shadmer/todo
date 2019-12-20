@@ -1,6 +1,6 @@
 <template>
     <section class="auth">
-        <form class="form  form--second" @submit.prevent="">
+        <form class="form  form--second" @submit.prevent="auth">
             <label class="form__item">
                 <span>Логин:</span>
                 <input class="input" required v-model="login" type="text" placeholder=""/>
@@ -33,7 +33,25 @@
         methods: {
             changeMode() {
                 this.$emit('changeMode', 1);
-            }
+            },
+            auth() {
+                let data = {
+                    'login': this.login,
+                    'password': this.password,
+                };
+
+                this.$store.dispatch('users/auth', data).then(
+                    respones => {
+                        this.login = '';
+                        this.password = '';
+                        this.$router.push('/');
+                    },
+                    error => {
+                        //todo обработка ошибок
+                        console.log('не авторизую!');
+                    }
+                );
+            },
         }
     }
 </script>

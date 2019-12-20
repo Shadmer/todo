@@ -53,10 +53,10 @@
             addTask(title) {
                 this.$store.dispatch('tasks/addTask', title).then(
                     respones => {
-                        alert('ok!');
+                        console.log('ok!');
                     },
                     error => {
-                        alert('fuck!');
+                        console.log('fuck!');
                     }
                 );
             },

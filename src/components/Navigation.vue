@@ -21,8 +21,18 @@
         computed: {
             routes() {
                 let routes = this.$router.options.routes;
-                routes.pop();
-                return routes;
+                let cabinet = "/cabinet";
+                let user = this.$store.state.users.user;
+
+                let filtered = routes.filter(route => {
+                    if (user === null) {
+                        return route.path === cabinet && route.name !== 'NotFound';
+                    } else {
+                        return route.name !== 'NotFound';
+                    }
+                });
+
+                return filtered;
             },
         },
         methods:{

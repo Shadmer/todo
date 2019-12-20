@@ -36,10 +36,10 @@
         created() {
             this.$store.dispatch('tasks/getTasks').then(
                 response => {
-
+                    console.log('Получите ваши задачи');
                 },
                 error => {
-                    console.log(error.response);
+                    console.log('Сходите-ка нахрен!');
                 }
             );
 

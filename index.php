@@ -3,6 +3,8 @@
 define('ROOT', __DIR__);
 $config = include_once (__DIR__ . '/config.php');
 
+session_start();
+
 if ($config['devMode']) {
     header('Access-Control-Allow-Origin: *');
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -12,9 +14,9 @@ if ($config['devMode']) {
 
     ini_set('display_errors',1);
     error_reporting(E_ALL);
-}
 
-session_start();
+    $_SESSION['user'] = 0;
+}
 
 require_once __DIR__ . '/api/core/Autoload.php';
 

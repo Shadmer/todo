@@ -54,13 +54,6 @@ const actions = {
                 reject(error);
             });
         });
-
-        // axios({
-        //     method: "get",
-        //     url: "/api/task",
-        // }).then((res) => {
-        //     context.commit('SET_TASKS', res.data);
-        // });
     },
     addTask(context, task) {
         let FD = new FormData();

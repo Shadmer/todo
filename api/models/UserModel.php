@@ -16,7 +16,7 @@ class UserModel extends BaseModel
         parent::__construct($db, 'users');
     }
 
-    public function add($data)
+    public function registration($data)
     {
         $sql = "INSERT INTO `users` (login, password) VALUES (:login, :password)";
         $stmt = $this->db->prepare($sql);
@@ -30,5 +30,28 @@ class UserModel extends BaseModel
         return [
             'id' => (int)$id,
         ];
+    }
+
+    public function auth($data)
+    {
+        $sql = "SELECT * FROM `users` WHERE login = :login AND password = :password";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'login' => $data['login'],
+            'password' => $data['password'],
+        ]);
+
+        return $stmt->fetch();
+    }
+
+    public function checkLoginExist($data)
+    {
+        $sql = "SELECT * FROM `users` WHERE login = :login";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'login' => $data['login'],
+        ]);
+
+        return $stmt->fetch();
     }
 }

@@ -1,8 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Tasks from './views/Tasks'
+import store from './store/index'
 
 Vue.use(Router)
+
+// let isAuth = (to, from, next) => {
+//     if (store.state.users.user === null) {
+//         next('/cabinet');
+//     } else {
+//         next();
+//     }
+// };
 
 export default new Router({
     mode: 'history',
@@ -11,12 +20,14 @@ export default new Router({
         {
             path: '/',
             name: 'Задачи',
-            component: Tasks
+            component: Tasks,
+            // beforeEnter: isAuth
         },
         {
             path: '/info',
             name: 'Инфо',
-            component: () => import('./views/Info.vue')
+            component: () => import('./views/Info.vue'),
+            // beforeEnter: isAuth
         },
         {
             path: '/cabinet',
@@ -29,4 +40,4 @@ export default new Router({
             component: () => import('./views/NotFound.vue')
         },
     ]
-})
+});

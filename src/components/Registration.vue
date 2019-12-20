@@ -46,7 +46,18 @@
                     'password': this.password,
                 };
 
-                this.$store.dispatch('users/addUser', data);
+                this.$store.dispatch('users/registration', data).then(
+                    respones => {
+                        this.login = '';
+                        this.password = '';
+                        this.repeatedPassword = '';
+                        // this.$router.push('/');
+                    },
+                    error => {
+                        //todo обработка ошибок
+                        console.log('не зарегистрирую!');
+                    }
+                );
             },
         }
 

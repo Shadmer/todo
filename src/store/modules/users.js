@@ -1,29 +1,66 @@
 import axios from 'axios';
 
 const state = {
-    all: [],
+    user: null
 };
 
 const getters = {};
 
 const mutations = {
-    // ADD_CATEGORY(state, category) {
-    //     state.all.push(category);
-    // },
+    SET_USER(state, user) {
+        state.user = user;
+    }
 };
 
 const actions = {
-    addUser(context, data) {
+    registration(context, data) {
         let FD = new FormData();
         FD.append("login", data.login);
         FD.append("password", data.password);
 
-        axios({
-            method: "post",
-            url: "/api/user/add",
-            data: FD
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "post",
+                url: "/api/user/registration",
+                data: FD
+            }).then(res => {
+                resolve(res);
+            }, error => {
+                reject(error);
+            })
         });
     },
+    auth(context, data) {
+        let FD = new FormData();
+        FD.append("login", data.login);
+        FD.append("password", data.password);
+
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "post",
+                url: "/api/user/auth",
+                data: FD
+            }).then(res => {
+                resolve(res)  ;
+            }, error => {
+                reject(error);
+            })
+        });
+    },
+    logout(context) {
+        context.commit('SET_USER', null);
+
+        // return new Promise((resolve, reject) => {
+        //     axios({
+        //         method: "post",
+        //         url: "/api/user/logout",
+        //     }).then(res => {
+        //         resolve(res)  ;
+        //     }, error => {
+        //         reject(error);
+        //     })
+        // });
+    }
 };
 
 export default {
