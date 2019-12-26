@@ -3,11 +3,23 @@
         <form class="form  form--second" @submit.prevent="auth">
             <label class="form__item">
                 <span>Логин:</span>
-                <input class="input" required v-model="login" type="text" placeholder=""/>
+                <input class="input"
+                       v-model="login"
+                       @input="clearError"
+                       type="text"
+                       placeholder=""
+                       required
+                />
             </label>
             <label class="form__item">
                 <span>Пароль:</span>
-                <input class="input" required v-model="password" type="password" placeholder=""/>
+                <input class="input"
+                       v-model="password"
+                       @input="clearError"
+                       type="password"
+                       placeholder=""
+                       required
+                />
             </label>
             <div class="form__btn-block">
                 <button class="btn" type="submit">Войти</button>
@@ -34,21 +46,22 @@
             changeMode() {
                 this.$emit('changeMode', 1);
             },
+            clearError() {
+                this.$emit('clearError');
+            },
             auth() {
                 let data = {
                     'login': this.login,
                     'password': this.password,
                 };
-
                 this.$store.dispatch('users/auth', data).then(
-                    respones => {
+                    response => {
                         this.login = '';
                         this.password = '';
                         this.$router.push('/');
                     },
                     error => {
-                        //todo обработка ошибок
-                        console.log('не авторизую!');
+                        this.$emit('setError', error.response.data);
                     }
                 );
             },

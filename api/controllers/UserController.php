@@ -16,16 +16,18 @@ class UserController extends BaseController
         parent::__construct($db, $helpers, "\models\UserModel");
     }
 
-    public function actionTest()
+    public function actionGetUser()
     {
-        echo json_encode($_SESSION);
+        $user = $this->pdo->getUser($_SESSION['user']);
+        unset($user['password']);
+        echo json_encode($user);
     }
 
     public function actionRegistration()
     {
         $checkLogin = $this->pdo->checkLoginExist($_POST);
         if ($checkLogin) {
-            $this->helpers->throwHttpError('400', 'login exists');
+            $this->helpers->throwHttpError('login_exists', 'login exists');
             die;
         }
 
@@ -42,8 +44,13 @@ class UserController extends BaseController
             $_SESSION['user'] = $data['id'];
             echo json_encode($data);
         } else {
-            $this->helpers->throwHttpError('400', 'wrong login or password');
+            $this->helpers->throwHttpError('wrong_login_or_password', 'wrong login or password');
             die;
         }
+    }
+
+    public function actionLogout()
+    {
+        unset($_SESSION['user']);
     }
 }

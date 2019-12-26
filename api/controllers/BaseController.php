@@ -17,7 +17,7 @@ abstract class BaseController
         $this->pdo = new $this->model($db);
 
         if ($this->model !== '\models\UserModel' && !isset($_SESSION['user'])) {
-            $this->helpers->throwHttpError('400', 'no_authorization');
+            $this->helpers->throwHttpError('bad_authorisation', 'bad authorisation');
             die;
         }
     }

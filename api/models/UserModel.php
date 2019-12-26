@@ -16,6 +16,17 @@ class UserModel extends BaseModel
         parent::__construct($db, 'users');
     }
 
+    public function getUser($id)
+    {
+        $sql = "SELECT * FROM `users` WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'id' => $id,
+        ]);
+
+        return $stmt->fetch();
+    }
+
     public function registration($data)
     {
         $sql = "INSERT INTO `users` (login, password) VALUES (:login, :password)";

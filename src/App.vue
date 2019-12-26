@@ -34,6 +34,11 @@
             Stub
         },
         created() {
+
+            //todo доделать промисы и проверки
+
+            this.$store.dispatch('users/getUserId');
+
             this.$store.dispatch('tasks/getTasks').then(
                 response => {
                     console.log('Получите ваши задачи');

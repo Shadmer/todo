@@ -1,18 +1,33 @@
 import axios from 'axios';
 
 const state = {
-    user: null
+    user: null,
+    name: ''
 };
 
 const getters = {};
 
 const mutations = {
     SET_USER(state, user) {
-        state.user = user;
-    }
+        state.user = user.id;
+        state.name = user.name;
+    },
 };
 
 const actions = {
+    getUserId(context) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "get",
+                url: "/api/user/getUser",
+            }).then((res) => {
+                context.commit('SET_USER', res.data);
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
+        });
+    },
     registration(context, data) {
         let FD = new FormData();
         FD.append("login", data.login);
@@ -24,6 +39,7 @@ const actions = {
                 url: "/api/user/registration",
                 data: FD
             }).then(res => {
+                context.commit('SET_USER', res.data.id);
                 resolve(res);
             }, error => {
                 reject(error);
@@ -41,6 +57,7 @@ const actions = {
                 url: "/api/user/auth",
                 data: FD
             }).then(res => {
+                context.commit('SET_USER', res.data.id);
                 resolve(res)  ;
             }, error => {
                 reject(error);
@@ -48,18 +65,17 @@ const actions = {
         });
     },
     logout(context) {
-        context.commit('SET_USER', null);
-
-        // return new Promise((resolve, reject) => {
-        //     axios({
-        //         method: "post",
-        //         url: "/api/user/logout",
-        //     }).then(res => {
-        //         resolve(res)  ;
-        //     }, error => {
-        //         reject(error);
-        //     })
-        // });
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "post",
+                url: "/api/user/logout",
+            }).then(res => {
+                context.commit('SET_USER', null);
+                resolve(res)  ;
+            }, error => {
+                reject(error);
+            })
+        });
     }
 };
 

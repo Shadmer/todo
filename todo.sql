@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 11 2019 г., 08:51
+-- Время создания: Дек 26 2019 г., 13:09
 -- Версия сервера: 5.6.43
 -- Версия PHP: 5.6.38
 
@@ -30,15 +30,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL
+  `title` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `categories`
 --
 
-INSERT INTO `categories` (`id`, `title`) VALUES
-(81, '123');
+INSERT INTO `categories` (`id`, `title`, `user_id`) VALUES
+(96, 'todo list', 0),
+(97, 'Авторизация', 0);
 
 -- --------------------------------------------------------
 
@@ -50,20 +52,46 @@ CREATE TABLE `tasks` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `category_id` int(11) NOT NULL DEFAULT '0',
-  `completed` tinyint(1) NOT NULL DEFAULT '0'
+  `completed` tinyint(1) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `title`, `category_id`, `completed`) VALUES
-(275, 'Если нет категорий - активная категория \"Без категории\"', 0, 1),
-(276, 'Установка задачам категории в соответствии с выбранной категорией', 0, 1),
-(277, 'При удалении категории, сбросить связанным задачам категории в ноль', 0, 0),
-(279, 'Реализовать, собственно, фильтрацию', 0, 0),
-(280, 'Поиграться с шириной', 0, 0),
-(281, 'Реализовать футер', 0, 0);
+INSERT INTO `tasks` (`id`, `title`, `category_id`, `completed`, `user_id`) VALUES
+(495, 'сделать авторизацию', 96, 0, 0),
+(496, 'добавить миграции', 96, 0, 0),
+(535, 'поселить в докер', 96, 0, 0),
+(538, 'Добавить форму регистрации', 97, 1, 0),
+(539, 'Обработать и оформить ошибки при регистрации', 97, 0, 0),
+(540, 'Добавить форму авторизации', 97, 1, 0),
+(541, 'Автоматическая авторизация при регистрации', 97, 1, 0),
+(542, 'Скрывать недоступные роуты', 97, 1, 0),
+(544, 'Реализовать функцию выхода', 97, 1, 0),
+(549, 'Создать кабинет зарегистрированного пользователя', 97, 0, 0),
+(550, 'Получать id_user', 97, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `login` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `users`
+--
+
+INSERT INTO `users` (`id`, `login`, `password`) VALUES
+(1, 'Admin', 'root'),
+(56, '1', '1');
 
 --
 -- Индексы сохранённых таблиц
@@ -82,6 +110,12 @@ ALTER TABLE `tasks`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -89,13 +123,19 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT для таблицы `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT для таблицы `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=293;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=551;
+
+--
+-- AUTO_INCREMENT для таблицы `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

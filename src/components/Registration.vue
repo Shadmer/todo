@@ -3,15 +3,31 @@
         <form class="form" @submit.prevent="register">
             <label class="form__item">
                 <span>Логин:</span>
-                <input class="input" required v-model="login" type="text" placeholder=""/>
+                <input class="input"
+                       v-model="login"
+                       @input="clearError"
+                       type="text"
+                       placeholder=""
+                       required
+                />
             </label>
             <label class="form__item">
                 <span>Пароль:</span>
-                <input class="input" required v-model="password" type="password" placeholder=""/>
+                <input class="input"
+                       v-model="password"
+                       type="password"
+                       placeholder=""
+                       required
+                />
             </label>
             <label class="form__item">
                 <span>Повторите пароль:</span>
-                <input class="input" required v-model="repeatedPassword" type="password" placeholder=""/>
+                <input class="input"
+                       v-model="repeatedPassword"
+                       type="password"
+                       placeholder=""
+                       required
+                />
             </label>
             <div class="form__btn-block">
                 <button class="btn" type="submit">Зарегистрироваться</button>
@@ -32,11 +48,15 @@
             }
         },
         methods: {
+            clearError() {
+                this.$emit('clearError');
+            },
             changeMode() {
                 this.$emit('changeMode', 0);
             },
             register() {
                 if (this.password !== this.repeatedPassword) {
+                    //todo сделать нормальный вывод ошибок
                     alert('Пароли не совпадают!');
                     return;
                 }
@@ -47,15 +67,14 @@
                 };
 
                 this.$store.dispatch('users/registration', data).then(
-                    respones => {
+                    response => {
                         this.login = '';
                         this.password = '';
                         this.repeatedPassword = '';
-                        // this.$router.push('/');
+                        this.$router.push('/');
                     },
                     error => {
-                        //todo обработка ошибок
-                        console.log('не зарегистрирую!');
+                        this.$emit('setError', error.response.data);
                     }
                 );
             },

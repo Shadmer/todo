@@ -79,6 +79,7 @@ const actions = {
             });
         });
     },
+    //todo добавить промис
     removeTask(context, id) {
         axios({
             method: "delete",
@@ -87,6 +88,7 @@ const actions = {
             context.commit('REMOVE_TASK', id);
         });
     },
+    //todo добавить промис
     editTask(context, task){
         let USP = new URLSearchParams();
         USP.append("title", task.title);
@@ -98,6 +100,7 @@ const actions = {
             data: USP
         })
     },
+    //todo добавить промис
     removeTasksByCategoryId(context, id) {
         axios({
             method: "delete",
@@ -106,6 +109,7 @@ const actions = {
             context.commit('REMOVE_TASKS_BY_CATEGORY_ID', id);
         });
     },
+    //todo добавить промис
     removeCompletedTasks(context, id) {
         axios({
             method: "delete",

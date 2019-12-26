@@ -52,7 +52,7 @@
         methods: {
             addTask(title) {
                 this.$store.dispatch('tasks/addTask', title).then(
-                    respones => {
+                    response => {
                         console.log('ok!');
                     },
                     error => {

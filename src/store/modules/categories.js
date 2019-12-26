@@ -39,6 +39,7 @@ const actions = {
             })
         });
     },
+    //todo добавить промис
     addCategory(context, task) {
         let FD = new FormData();
         FD.append("title", task);
@@ -54,6 +55,7 @@ const actions = {
             context.commit('SET_CURRENT_CATEGORY_ID', res.data.id);
         });
     },
+    //todo добавить промис
     editCategory(context, category){
         let USP = new URLSearchParams();
         USP.append("title", category.title);
@@ -64,6 +66,7 @@ const actions = {
         })
 
     },
+    //todo добавить промис
     removeCategory(context, id) {
         axios({
             method: "delete",

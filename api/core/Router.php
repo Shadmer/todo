@@ -75,11 +75,11 @@ class Router
                     array($this->requestData['params'], $this->requestData['formData'])
                 );
             } else {
-                $this->helpers->throwHttpError('400', 'invalid_parameters');
+                $this->helpers->throwHttpError('bad_request', 'bad request');
             }
 
         } else {
-            $this->helpers->throwHttpError('400', 'bad_request');
+            $this->helpers->throwHttpError('bad_request', 'bad request');
         }
 
 
