@@ -1,6 +1,11 @@
 <template>
     <div id="app" class="app">
         <div is="Stub"></div>
+        <div v-if="isError" class="app__err">
+            <span class="app__err-message">
+                {{errorMessage}}
+            </span>
+        </div>
         <main class="app__main">
             <div class="app__container">
                 <div class="app__content">
@@ -9,10 +14,10 @@
                         <div class="app__inner-head"></div>
                         <div class="app__inner-wrap">
                             <transition
-                                appear
-                                mode="out-in"
-                                enter-active-class="animated slideInDown"
-                                leave-active-class="animated slideOutUp">
+                                    appear
+                                    mode="out-in"
+                                    enter-active-class="animated slideInDown"
+                                    leave-active-class="animated slideOutUp">
                                 <router-view/>
                             </transition>
                         </div>
@@ -26,6 +31,7 @@
 <script>
     import Navigation from '@/components/Navigation';
     import Stub from '@/components/Stub';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'App',
@@ -34,26 +40,23 @@
             Stub
         },
         created() {
-
-            //todo доделать промисы и проверки
-
-            this.$store.dispatch('users/getUserId');
-
-            this.$store.dispatch('tasks/getTasks').then(
+            this.$store.dispatch('users/getUser').then(
                 response => {
-                    console.log('Получите ваши задачи');
+                    if (response.data.id !== null) {
+                        this.$store.dispatch('tasks/getTasks');
+                        this.$store.dispatch('categories/getCategories');
+                    }
                 },
                 error => {
-                    console.log('Сходите-ка нахрен!');
+                    this.$store.dispatch('errors/setError', error.response.data);
                 }
             );
-
-            this.$store.dispatch('categories/getCategories');
         },
-        data() {
-            return {
-                routes: this.$router.options.routes,
-            }
+        computed: {
+            ...mapGetters('errors', {
+                isError: 'isError',
+                errorMessage: 'errorMessage'
+            }),
         }
     }
 </script>
@@ -140,6 +143,28 @@
 
         &__inner-wrap {
             overflow: hidden;
-         }
+        }
+
+        &__err {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            background-color: rgba(0,0,0,.7);
+            z-index: 10000;
+
+            span {
+                display: block;
+                margin: auto;
+                padding: 30px 20px;
+                font-weight: bold;
+                font-size: 20px;
+                background-color: #fff;
+                border: 2px solid red;
+                border-radius: 10px;
+            }
+        }
     }
 </style>

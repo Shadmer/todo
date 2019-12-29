@@ -18,6 +18,25 @@ class UserController extends BaseController
 
     public function actionGetUser()
     {
+
+        if (!isset($_SESSION['user'])) {
+            $user = [
+                'id' => null,
+                'login' => null
+            ];
+            echo json_encode($user);
+            die;
+        }
+
+        if ($_SESSION['user'] === 0) {
+            $user = [
+                'id' => 0,
+                'login' => 'Developer'
+            ];
+            echo json_encode($user);
+            die;
+        }
+
         $user = $this->pdo->getUser($_SESSION['user']);
         unset($user['password']);
         echo json_encode($user);
@@ -32,21 +51,19 @@ class UserController extends BaseController
         }
 
         $data = $this->pdo->registration($_POST);
-//        $_SESSION['user'] = $data['id'];
         echo json_encode($data);
     }
 
     public function actionAuth()
     {
         $data = $this->pdo->auth($_POST);
-
-        if ($data) {
-            $_SESSION['user'] = $data['id'];
-            echo json_encode($data);
-        } else {
+        if (!$data) {
             $this->helpers->throwHttpError('wrong_login_or_password', 'wrong login or password');
             die;
         }
+
+        $_SESSION['user'] = $data['id'];
+        echo json_encode($data);
     }
 
     public function actionLogout()

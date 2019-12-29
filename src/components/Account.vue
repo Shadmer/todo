@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <div>{{user}}</div>
+    <div class="account">
+        <div class="account__name">Вы вошли как <b>{{user.name}}</b></div>
+        <br>
         <button class="btn" @click="logout">Выход</button>
     </div>
 </template>
@@ -10,7 +11,7 @@
         name: "Account",
         computed: {
             user() {
-                return this.$store.state.users.user;
+                return this.$store.state.users;
             }
         },
         methods: {
@@ -19,7 +20,9 @@
             },
             logout() {
                 this.$store.dispatch('users/logout').then(
-                    response => {
+                    () => {
+                        this.$store.commit('tasks/SET_TASKS', []);
+                        this.$store.commit('categories/SET_CATEGORIES', []);
                         this.changeMode();
                     },
                     error => {

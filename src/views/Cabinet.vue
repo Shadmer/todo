@@ -1,33 +1,20 @@
 <template>
     <div class="cabinet">
-        <h2>{{title}}</h2>
-        <!--todo удалить ненужное-->
-        <!--<button @click="mode = 0" class="btn">Авторизация</button>-->
-        <!--<button @click="mode = 1" class="btn">Регистрация</button>-->
-        <!--<button @click="mode = 2" class="btn">Кабинет</button>-->
-        <!--appear-->
-        <!--mode="out-in"-->
-        <!--enter-active-class="animated slideInRight"-->
-        <!--leave-active-class="animated slideOutRight"-->
-        <!--todo нормальный вывод ошибок-->
-        <div v-if="isError" class="error">{{errorMessage}}</div>
-        <!--todo переделать на цикл-->
+        <h2>{{getMode.title}}</h2>
+
         <transition
+                enter-active-class="animated zoomIn"
+                leave-active-class="animated zoomOut"
         >
-            <section is="Auth"
-                     v-if="mode === 0"
-                     @changeMode="setMode"
-                     @setError="setError"
-                     @clearError="clearError"
-            ></section>
-            <section is="Registration"
-                     v-if="mode === 1"
-                     @changeMode="setMode"
-                     @setError="setError"
-                     @clearError="clearError"
-            ></section>
-            <section is="Account"
-                     v-if="mode === 2"
+            <div v-if="isError" class="cabinet__error">{{errorMessage}}</div>
+        </transition>
+        <transition
+                appear
+                mode="out-in"
+                enter-active-class="animated slideInRight"
+                leave-active-class="animated slideOutRight"
+        >
+            <section :is="getMode.mode"
                      @changeMode="setMode"
                      @setError="setError"
                      @clearError="clearError"
@@ -40,7 +27,7 @@
     import Registration from "@/components/Registration";
     import Auth from "@/components/Auth";
     import Account from "@/components/Account";
-    import config from '../configs/errors';
+    import config from '@/configs/errors';
 
     export default {
         name: "Cabinet",
@@ -49,7 +36,7 @@
             Auth,
             Account,
         },
-        created() {
+        mounted() {
             if (this.$store.state.users.user !== null) {
                 this.mode = 2;
             }
@@ -62,16 +49,28 @@
             }
         },
         computed: {
-            title() {
+            getMode() {
                 switch (this.mode) {
                     case 0:
-                        return 'Авторизация';
+                        return {
+                            title: 'Авторизация',
+                            mode: 'Auth',
+                        };
                     case 1:
-                        return 'Регистрация';
+                        return {
+                            title: 'Регистрация',
+                            mode: 'Registration',
+                        };
                     case 2:
-                        return 'Личный кабинет';
+                        return {
+                            title: 'Личный кабинет',
+                            mode: 'Account',
+                        };
                     default:
-                        return 'Уходите :('
+                        return {
+                            title: 'Уходите',
+                            mode: null,
+                        };
                 }
             },
             isError() {
@@ -95,12 +94,20 @@
             clearError() {
                 this.errorCode = '';
             },
-        }
+        },
     }
 </script>
 
 <style lang="less">
     h2 {
         border-bottom: 1px solid gray;
+    }
+
+    .cabinet {
+        &__error {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: red;
+        }
     }
 </style>

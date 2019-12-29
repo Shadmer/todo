@@ -6,7 +6,7 @@ Vue.use(Router)
 
 let isAuth = (to, from, next) => {
     if (store.state.users.user === null) {
-        next('/cabinet');
+        next('/');
     } else {
         next();
     }
@@ -18,6 +18,11 @@ export default new Router({
     routes: [
         {
             path: '/',
+            name: 'Кабинет',
+            component: () => import('./views/Cabinet.vue'),
+        },
+        {
+            path: '/tasks',
             name: 'Задачи',
             component: () => import('./views/Tasks.vue'),
             beforeEnter: isAuth
@@ -27,11 +32,6 @@ export default new Router({
             name: 'Инфо',
             component: () => import('./views/Info.vue'),
             beforeEnter: isAuth
-        },
-        {
-            path: '/cabinet',
-            name: 'Кабинет',
-            component: () => import('./views/Cabinet.vue')
         },
         {
             path: '*',

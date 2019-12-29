@@ -7,25 +7,26 @@
                        v-model="login"
                        @input="clearError"
                        type="text"
-                       placeholder=""
                        required
                 />
             </label>
             <label class="form__item">
                 <span>Пароль:</span>
                 <input class="input"
+                       :class="{registration__error: isError}"
                        v-model="password"
+                       @input="clearError"
                        type="password"
-                       placeholder=""
                        required
                 />
             </label>
             <label class="form__item">
                 <span>Повторите пароль:</span>
                 <input class="input"
+                       :class="{registration__error: isError}"
                        v-model="repeatedPassword"
+                       @input="clearError"
                        type="password"
-                       placeholder=""
                        required
                 />
             </label>
@@ -45,10 +46,12 @@
                 login: '',
                 password: '',
                 repeatedPassword: '',
+                isError: false,
             }
         },
         methods: {
             clearError() {
+                this.isError = false;
                 this.$emit('clearError');
             },
             changeMode() {
@@ -56,8 +59,8 @@
             },
             register() {
                 if (this.password !== this.repeatedPassword) {
-                    //todo сделать нормальный вывод ошибок
-                    alert('Пароли не совпадают!');
+                    this.isError = true;
+                    this.$emit('setError', {code: 'bad_password'});
                     return;
                 }
 
@@ -67,11 +70,11 @@
                 };
 
                 this.$store.dispatch('users/registration', data).then(
-                    response => {
+                    () => {
                         this.login = '';
                         this.password = '';
                         this.repeatedPassword = '';
-                        this.$router.push('/');
+                        this.changeMode();
                     },
                     error => {
                         this.$emit('setError', error.response.data);
@@ -84,5 +87,10 @@
 </script>
 
 <style lang="less">
+    .registration {
+        &__error {
+            border-color: red;
+        }
+    }
 
 </style>

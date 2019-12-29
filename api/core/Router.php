@@ -64,10 +64,18 @@ class Router
         }
 
         if (in_array($this->requestData['controller'], $this->routes)) {
+            $db = DB::connect();
+
+            if (!$db) {
+                $this->helpers->throwHttpError('server_error', 'server error');
+                die;
+            }
+
             $controllerName = ucfirst($this->requestData['controller']) . 'Controller';
             $controllerName = sprintf('controllers\%s', $controllerName);
             $actionName = 'action' . ucfirst($this->requestData['action']);
-            $controller = new $controllerName(DB::connect(), $this->helpers);
+            $controller = new $controllerName($db, $this->helpers);
+
 
             if (method_exists($controller, $actionName)) {
                 call_user_func_array(
@@ -75,7 +83,7 @@ class Router
                     array($this->requestData['params'], $this->requestData['formData'])
                 );
             } else {
-                $this->helpers->throwHttpError('bad_request', 'bad request');
+                $this->helpers->throwHttpError('bad_request', 'invalid parameters');
             }
 
         } else {

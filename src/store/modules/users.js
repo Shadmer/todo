@@ -2,20 +2,25 @@ import axios from 'axios';
 
 const state = {
     user: null,
-    name: ''
+    name: null
 };
 
 const getters = {};
 
 const mutations = {
     SET_USER(state, user) {
-        state.user = user.id;
-        state.name = user.name;
+        if (user !== null) {
+            state.user = user.id;
+            state.name = user.login;
+        } else {
+            state.user = null;
+            state.name = null;
+        }
     },
 };
 
 const actions = {
-    getUserId(context) {
+    getUser(context) {
         return new Promise((resolve, reject) => {
             axios({
                 method: "get",
@@ -39,7 +44,6 @@ const actions = {
                 url: "/api/user/registration",
                 data: FD
             }).then(res => {
-                context.commit('SET_USER', res.data.id);
                 resolve(res);
             }, error => {
                 reject(error);
@@ -57,7 +61,7 @@ const actions = {
                 url: "/api/user/auth",
                 data: FD
             }).then(res => {
-                context.commit('SET_USER', res.data.id);
+                context.commit('SET_USER', res.data);
                 resolve(res)  ;
             }, error => {
                 reject(error);
@@ -67,11 +71,11 @@ const actions = {
     logout(context) {
         return new Promise((resolve, reject) => {
             axios({
-                method: "post",
+                method: "get",
                 url: "/api/user/logout",
             }).then(res => {
                 context.commit('SET_USER', null);
-                resolve(res)  ;
+                resolve(res);
             }, error => {
                 reject(error);
             })

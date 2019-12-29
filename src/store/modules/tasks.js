@@ -51,6 +51,7 @@ const actions = {
                 context.commit('SET_TASKS', res.data);
                 resolve(res);
             }, error => {
+                this.dispatch('errors/setError', error.response.data);
                 reject(error);
             });
         });
@@ -75,47 +76,70 @@ const actions = {
                 });
                 resolve(res);
             }, error => {
+                this.dispatch('errors/setError', error.response.data);
                 reject(error);
             });
         });
     },
-    //todo добавить промис
     removeTask(context, id) {
-        axios({
-            method: "delete",
-            url: "/api/task/delete/" + id,
-        }).then(() => {
-            context.commit('REMOVE_TASK', id);
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "delete",
+                url: "/api/task/delete/" + id,
+            }).then((res) => {
+                context.commit('REMOVE_TASK', id);
+                resolve(res);
+            }, error => {
+                this.dispatch('errors/setError', error.response.data);
+                reject(error);
+            });
         });
     },
-    //todo добавить промис
-    editTask(context, task){
+    editTask(context, task) {
         let USP = new URLSearchParams();
         USP.append("title", task.title);
         USP.append("category_id", task.category_id);
         USP.append("completed", Number(task.completed));
-        axios({
-            method: "put",
-            url: "/api/task/edit/" + task.id,
-            data: USP
-        })
-    },
-    //todo добавить промис
-    removeTasksByCategoryId(context, id) {
-        axios({
-            method: "delete",
-            url: "/api/task/deleteByCategoryId/" + id,
-        }).then(() => {
-            context.commit('REMOVE_TASKS_BY_CATEGORY_ID', id);
+
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "put",
+                url: "/api/task/edit/" + task.id,
+                data: USP
+            }).then((res) => {
+                resolve(res);
+            }, error => {
+                this.dispatch('errors/setError', error.response.data);
+                reject(error);
+            });
         });
     },
-    //todo добавить промис
+    removeTasksByCategoryId(context, id) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "delete",
+                url: "/api/task/deleteByCategoryId/" + id,
+            }).then((res) => {
+                context.commit('REMOVE_TASKS_BY_CATEGORY_ID', id);
+                resolve(res);
+            }, error => {
+                this.dispatch('errors/setError', error.response.data);
+                reject(error);
+            });
+        });
+    },
     removeCompletedTasks(context, id) {
-        axios({
-            method: "delete",
-            url: "/api/task/deleteCompletedTasks/" + id,
-        }).then(() => {
-            context.commit('REMOVE_COMPLETED_TASKS');
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "delete",
+                url: "/api/task/deleteCompletedTasks/" + id,
+            }).then((res) => {
+                context.commit('REMOVE_COMPLETED_TASKS');
+                resolve(res);
+            }, error => {
+                this.dispatch('errors/setError', error.response.data);
+                reject(error);
+            });
         });
     }
 };

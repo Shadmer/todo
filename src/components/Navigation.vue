@@ -21,7 +21,7 @@
         computed: {
             routes() {
                 let routes = this.$router.options.routes;
-                let cabinet = "/cabinet";
+                let cabinet = "/";
                 let user = this.$store.state.users.user;
 
                 let filtered = routes.filter(route => {

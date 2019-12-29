@@ -55,10 +55,12 @@
                     'password': this.password,
                 };
                 this.$store.dispatch('users/auth', data).then(
-                    response => {
+                    () => {
                         this.login = '';
                         this.password = '';
-                        this.$router.push('/');
+                        this.$store.dispatch('tasks/getTasks');
+                        this.$store.dispatch('categories/getCategories');
+                        this.$router.push('/tasks');
                     },
                     error => {
                         this.$emit('setError', error.response.data);
