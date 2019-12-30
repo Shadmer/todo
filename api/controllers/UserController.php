@@ -38,7 +38,6 @@ class UserController extends BaseController
         }
 
         $user = $this->pdo->getUser($_SESSION['user']);
-        unset($user['password']);
         echo json_encode($user);
     }
 
@@ -57,6 +56,7 @@ class UserController extends BaseController
     public function actionAuth()
     {
         $data = $this->pdo->auth($_POST);
+
         if (!$data) {
             $this->helpers->throwHttpError('wrong_login_or_password', 'wrong login or password');
             die;

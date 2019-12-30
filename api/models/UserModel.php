@@ -18,7 +18,7 @@ class UserModel extends BaseModel
 
     public function getUser($id)
     {
-        $sql = "SELECT * FROM `users` WHERE id = :id";
+        $sql = "SELECT id, login FROM `users` WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'id' => $id,
@@ -29,11 +29,12 @@ class UserModel extends BaseModel
 
     public function registration($data)
     {
+
         $sql = "INSERT INTO `users` (login, password) VALUES (:login, :password)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'login' => $data['login'],
-            'password' => $data['password'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
         ]);
 
         $id = (int)$this->db->lastInsertId();
@@ -45,14 +46,18 @@ class UserModel extends BaseModel
 
     public function auth($data)
     {
-        $sql = "SELECT * FROM `users` WHERE login = :login AND password = :password";
+        $sql = "SELECT * FROM `users` WHERE login = :login";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'login' => $data['login'],
-            'password' => $data['password'],
         ]);
+        $user = $stmt->fetch();
 
-        return $stmt->fetch();
+        if (password_verify($data['password'], $user['password'])) {
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     public function checkLoginExist($data)

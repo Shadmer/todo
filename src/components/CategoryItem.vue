@@ -41,7 +41,7 @@
         },
         computed: {
             category() {
-                return this.item ? this.item : {id: 0, title: 'Без категории'};
+                return this.item ? this.item : {id: 0, title: 'По умолчанию'};
             }
         },
         methods: {
