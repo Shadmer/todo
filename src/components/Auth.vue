@@ -24,7 +24,7 @@
             <div class="form__btn-block">
                 <button class="btn" type="submit">Войти</button>
                 <label class="form__save">
-                    <input type="checkbox">
+                    <input v-model="isRemember" type="checkbox">
                     <span>Запомнить?</span>
                 </label>
                 <a @click="changeMode">Перейти к регистрации >></a>
@@ -40,6 +40,7 @@
             return {
                 login: '',
                 password: '',
+                isRemember: false,
             }
         },
         methods: {
@@ -53,6 +54,7 @@
                 let data = {
                     'login': this.login,
                     'password': this.password,
+                    'isRemember': Number(this.isRemember),
                 };
                 this.$store.dispatch('users/auth', data).then(
                     () => {

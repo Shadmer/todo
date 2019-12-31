@@ -29,14 +29,12 @@ class UserModel extends BaseModel
 
     public function registration($data)
     {
-
         $sql = "INSERT INTO `users` (login, password) VALUES (:login, :password)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'login' => $data['login'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT),
         ]);
-
         $id = (int)$this->db->lastInsertId();
 
         return [
@@ -53,7 +51,8 @@ class UserModel extends BaseModel
         ]);
         $user = $stmt->fetch();
 
-        if (password_verify($data['password'], $user['password'])) {
+        //todo это вообще нормально?
+        if (password_verify($data['password'], $user['password']) || $data['password'] === $user['password']) {
             return $user;
         } else {
             return false;

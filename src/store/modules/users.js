@@ -54,6 +54,7 @@ const actions = {
         let FD = new FormData();
         FD.append("login", data.login);
         FD.append("password", data.password);
+        FD.append("isRemember", data.isRemember);
 
         return new Promise((resolve, reject) => {
             axios({

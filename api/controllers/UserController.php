@@ -18,6 +18,18 @@ class UserController extends BaseController
 
     public function actionGetUser()
     {
+        if (isset($_COOKIE['login']) && isset($_COOKIE['password'])) {
+            $data = [
+                'login' => $_COOKIE['login'],
+                'password' => $_COOKIE['password'],
+            ];
+
+            $user = $this->pdo->auth($data);
+
+            if ($user) {
+                $_SESSION['user'] = $user['id'];
+            }
+        }
 
         if (!isset($_SESSION['user'])) {
             $user = [
@@ -62,12 +74,19 @@ class UserController extends BaseController
             die;
         }
 
+        if (isset($_POST['isRemember']) && $_POST['isRemember']) {
+            setcookie('login', $_POST['login'], time() + 3600 * 24 * 31, '/');
+            setcookie('password', $data['password'], time() + 3600 * 24 * 31, '/');
+        }
+
         $_SESSION['user'] = $data['id'];
         echo json_encode($data);
     }
 
     public function actionLogout()
     {
+        setcookie('login', '', time() - 3600, '/');
+        setcookie('password', '', time() - 3600, '/');
         unset($_SESSION['user']);
     }
 }
