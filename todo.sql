@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 26 2019 г., 13:09
--- Версия сервера: 5.6.43
--- Версия PHP: 5.6.38
+-- Время создания: Янв 08 2020 г., 18:03
+-- Версия сервера: 10.3.13-MariaDB
+-- Версия PHP: 7.1.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,8 +39,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `title`, `user_id`) VALUES
-(96, 'todo list', 0),
-(97, 'Авторизация', 0);
+(96, 'todo list', 0);
 
 -- --------------------------------------------------------
 
@@ -51,8 +50,8 @@ INSERT INTO `categories` (`id`, `title`, `user_id`) VALUES
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `category_id` int(11) NOT NULL DEFAULT '0',
-  `completed` tinyint(1) NOT NULL DEFAULT '0',
+  `category_id` int(11) NOT NULL DEFAULT 0,
+  `completed` tinyint(1) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -61,17 +60,11 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `title`, `category_id`, `completed`, `user_id`) VALUES
-(495, 'сделать авторизацию', 96, 0, 0),
+(495, 'сделать авторизацию', 96, 1, 0),
 (496, 'добавить миграции', 96, 0, 0),
 (535, 'поселить в докер', 96, 0, 0),
-(538, 'Добавить форму регистрации', 97, 1, 0),
-(539, 'Обработать и оформить ошибки при регистрации', 97, 0, 0),
-(540, 'Добавить форму авторизации', 97, 1, 0),
-(541, 'Автоматическая авторизация при регистрации', 97, 1, 0),
-(542, 'Скрывать недоступные роуты', 97, 1, 0),
-(544, 'Реализовать функцию выхода', 97, 1, 0),
-(549, 'Создать кабинет зарегистрированного пользователя', 97, 0, 0),
-(550, 'Получать id_user', 97, 0, 0);
+(576, 'Задача для главного!', 0, 0, 1),
+(577, '1', 0, 0, 68);
 
 -- --------------------------------------------------------
 
@@ -82,7 +75,7 @@ INSERT INTO `tasks` (`id`, `title`, `category_id`, `completed`, `user_id`) VALUE
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `login` varchar(32) NOT NULL,
-  `password` varchar(32) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -90,8 +83,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `password`) VALUES
-(1, 'Admin', 'root'),
-(56, '1', '1');
+(1, 'root', '$2y$10$gOrmWUsXezh14Uvs2LIH0e2MGGHwPm.hvxY4bsH0P5fcO9pDw7c8y'),
+(68, '1', '$2y$10$2PyZAwDKZPoFMB079Ewn/OfwdATnhYh83eIOahlAY9kH0CJYv/ORy');
 
 --
 -- Индексы сохранённых таблиц
@@ -123,19 +116,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT для таблицы `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=551;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=579;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

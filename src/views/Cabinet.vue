@@ -36,12 +36,6 @@
             Auth,
             Account,
         },
-        mounted() {
-            if (this.$store.state.users.user !== null) {
-                this.mode = 2;
-            }
-
-        },
         data() {
             return {
                 mode: 0,
@@ -50,6 +44,10 @@
         },
         computed: {
             getMode() {
+                if (this.$store.state.users.user !== null) {
+                    this.mode = 2;
+                }
+
                 switch (this.mode) {
                     case 0:
                         return {
